@@ -14,13 +14,22 @@
 #define STARTP 27
 #define ENDP   60
 
-void sigint () {
+void sigint (int signum) {
 
 	Mprintf( 0, "\n");
 	PrintMaze(IdaInfo->IdaMaze);
 	print_stats(0);
 	signal(SIGINT,sigint);
 }
+
+#define MAX_PRINT_PRIORITY INT_MAX;
+const int DEFAULT_PRINT_PRIORITY =
+#if defined(_DEBUG) || defined(DEBUG)
+	MAX_PRINT_PRIORITY
+#else
+	2
+#endif
+;
 
 int main() {
 
@@ -35,7 +44,7 @@ int main() {
 
 	ev = getenv("PP");
 	if (ev!=NULL) IdaInfo->PrintPriority=atoi(ev);
-	else IdaInfo->PrintPriority=2;
+	else IdaInfo->PrintPriority= DEFAULT_PRINT_PRIORITY;
 	Mprintf(2, "PrintPriority: %i\n", IdaInfo->PrintPriority);
 
 	i = InitTree(DlSup1);

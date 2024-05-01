@@ -10,7 +10,31 @@
 */ 
 
 #include "board.h"
+
+#ifdef _MSC_VER
+
+#include <windows.h>
+
+struct itimerval {
+   struct timeval it_interval; /* next value */
+   struct timeval it_value;    /* current value */
+};
+
+const int ITIMER_REAL = 1;
+const int ITIMER_VIRTUAL = 2;
+
+const int SIGALRM = 0x70000;
+const int SIGVTALRM = 0x70001;
+
+static int setitimer(int which, const struct itimerval* value, struct itimerval* ovalue)
+{
+   Mprintf(0, "Max working time not implemented in Windows\n");
+   return 0;
+}
+
+#else
 #include <sys/time.h>
+#endif // _MSC_VER
 
 /* this code was generously made available by Diego Novillo
  * and Peter van Beek */
@@ -19,7 +43,7 @@
  *  Signal handler for when timer expires.
  */
 static void
-expire()
+expire(int signum)
 {
         MainIdaInfo.TimedOut = YES;
 	Mprintf(0,"\nTimeOut!!\n");
@@ -30,7 +54,7 @@ expire()
  *  The timer counts in virtual time (CPU time) or real time, depending
  *  on ``type''.
  */
-void SetTimer()
+void SetMaxWorkTimer()
 {
         struct itimerval value;
 	int    time_limit;

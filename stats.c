@@ -10,7 +10,11 @@
 */ 
 
 #include "board.h"
+#ifdef WIN32
+#include "win/resource.h"
+#else
 #include <sys/resource.h>
+#endif
 
 MOVE DummyMove = {ENDPATH,ENDPATH,ENDPATH,ENDPATH};
 long area_pos_nc=0, area_neg_nc=0;	/* node counts for pos/neg searches */
@@ -94,7 +98,7 @@ void init_stats() {
 void print_stats(int pri) {
         int i,ttl;
 	time_t t;
-	struct rusage r_usage;
+	struct rusage r_usage = {0};
 	
 	Debug(pri,0, "tt: %c, dl_mg: %c, dl2_mg: %c\n",
 		Options.tt==1?'Y':'N', Options.dl_mg==1?'Y':'N',

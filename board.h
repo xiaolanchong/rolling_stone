@@ -21,7 +21,9 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 #define CONFLICT_INC 1000	/* lumb increment of tested array */
 #define CONFLICT_RESET 5000	/* number of conflicts after which we set to 0*/
@@ -84,9 +86,12 @@ extern int PATTERNRATIO;
 	#define         DL2PATHFILE "screens/DL.2"
 #endif
 
-
+#ifndef min
 #define min(a,b)	(((a)<(b))?a:b)
+#endif
+#ifndef max
 #define max(a,b)	(((a)>(b))?a:b)
+#endif
 
 #define EMPTY 	0	/* Nothing on square */
 #define NONE 	0	/*  */
