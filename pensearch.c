@@ -19,7 +19,7 @@ MAZE *AreaMaze;
  * PenMove search depends on the position of the shadow stones, which it
  * should not. */
 
-int PenIsGoalNode(int g)
+BOOLTYPE PenIsGoalNode(int g)
 {
 	if (IdaInfo->IdaMaze->number_stones == 0 || IdaInfo->IdaMaze->h == 0) {
 		IdaInfo->CurrentSolutionDepth=g;
@@ -29,7 +29,7 @@ int PenIsGoalNode(int g)
 	return(0);
 }
 
-void MarkReachPos(MAZE *maze, BitString reach, PHYSID manpos, int clear)
+void MarkReachPos(const MAZE *maze, BitString reach, PHYSID manpos, BOOLTYPE clear)
 {
   /* recursive function to mark the fields that are reachable */
 	
@@ -59,7 +59,7 @@ void MarkReachPos(MAZE *maze, BitString reach, PHYSID manpos, int clear)
   }
 }
 
-int FindFringeStones( MAZE *maze, BitString fs,
+int FindFringeStones( const MAZE *maze, BitString fs,
 		      BitString no_reach, PHYSID move_to )
 /* returns number of stones surrounding area */
 /* ACHTUNG: watch out that we are not including stones on goal squares,
@@ -80,13 +80,13 @@ int FindFringeStones( MAZE *maze, BitString fs,
 	marked++;
       }
   }
-  if (marked == 0) return(0);		     /* no inaccesss area close by */
+  if (marked == 0) return(NO);		     /* no inaccesss area close by */
 
   /* now find the stones that suround that area and return that number */
   return(WhichStones(maze,fs,no_reach,YES));
 }
 
-int WhichStones(MAZE *maze, BitString fs, BitString no_reach, int clear)
+int WhichStones(const MAZE *maze, BitString fs, BitString no_reach, BOOLTYPE clear)
 /* add all the stones to fs that are touching no_reach area AND not
  * area, or are neighbour to one already part of the pattern, until no more
  * stones can be added */
@@ -122,7 +122,7 @@ int WhichStones(MAZE *maze, BitString fs, BitString no_reach, int clear)
   return(marked);
 }
 
-int AddMoreStones( MAZE *maze, BitString fs, BitString no_reach)
+BOOLTYPE AddMoreStones( const MAZE *maze, BitString fs, BitString no_reach)
 /* assuming fs contains the fringe stones and no_reach the currently selected
  * non_reachable area, try to add more non-reachable area (stones surounding
  * it. Return YES if successfully added, no if no such area exists */
@@ -151,8 +151,7 @@ int AddMoreStones( MAZE *maze, BitString fs, BitString no_reach)
   return(NO);
 }
 
-int  AreaMove(MAZE *maze, MOVE *last_move, int treedepth, int targetpen)
-/* Return True (YES) if targetpen was achieved */
+BOOLTYPE  AreaMove(MAZE *maze, MOVE *last_move, int treedepth, int targetpen)
 {
 	BitString	visible,no_reach,relevant;
 	IDA		idainfo,*old_idainfo;
@@ -425,7 +424,7 @@ void PenDeactivateStones(MAZE *maze, BitString visible, int targetpen)
 	PenLowerBound(maze,targetpen);
 }
 
-int PenMoveSuspected(MAZE *maze, MOVE *last_move)
+int PenMoveSuspected(const MAZE *maze, const MOVE *last_move)
 {
 /* 0 if we should search, >0 for already searched, <0 don't search */
 /* return 0 if we suspect a deadlock search is beneficial, here should be
@@ -492,8 +491,9 @@ int PenMiniConflict(int penalty, int minimize)
 		old_idainfo = IdaInfo;
 		InitIDA(&idainfo);
 		IdaInfo                 = &idainfo;
-		IdaInfo->IdaMaze        = SaveMaze(old_idainfo->IdaMaze,
-						   &savemaze);
+		SaveMaze(old_idainfo->IdaMaze,
+			&savemaze);
+		IdaInfo->IdaMaze = old_idainfo->IdaMaze;
 		CopyBS(IdaInfo->no_reach,old_idainfo->no_reach);
 		IdaInfo->ThresholdInc   = 1;
 		IdaInfo->AbortNodeCount = old_idainfo->pattern_node_limit;
@@ -553,8 +553,8 @@ int PenMiniConflict(int penalty, int minimize)
 	return(penalty);
 }
 
-PHYSID FindFarthestPosStone(MAZE *maze, BitString squares, 
-		      		  BitString already_visible)
+PHYSID FindFarthestPosStone(MAZE *maze, const BitString squares, 
+	const BitString already_visible)
 /* Find the square (position) the in squares that has a stone on it
  * that is not already visible */
 {

@@ -38,7 +38,7 @@ int GGGetHashTable(HASHKEY hashkey)
 		return(NO);
 }
 
-void SetPathFlag(MAZE *maze)
+void SetPathFlag(const MAZE *maze)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -51,7 +51,7 @@ void SetPathFlag(MAZE *maze)
 		entry->pathflag = 1;
 }
 
-void UnSetPathFlag(MAZE *maze)
+void UnSetPathFlag(const MAZE *maze)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -64,7 +64,7 @@ void UnSetPathFlag(MAZE *maze)
 		entry->pathflag = 0;
 }
 
-void ClearHashTable(MAZE *maze)
+void ClearHashTable(const MAZE *maze)
 /* clear a certain entry in the hashtable */
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
@@ -94,7 +94,7 @@ int QualityCompare( HASHENTRY *entry, int down )
 	    return -1;
 }
 
-HASHENTRY *StoreHashTable(MAZE *maze, int down, int min_h,
+HASHENTRY *StoreHashTable(const MAZE *maze, int down, int min_h,
 	int area, int dl, int pen, int pathflag)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
@@ -129,7 +129,7 @@ HASHENTRY *StoreHashTable(MAZE *maze, int down, int min_h,
 	return(entry);
 }
 
-HASHENTRY *GetHashTable(MAZE *maze) {
+HASHENTRY *GetHashTable(const MAZE *maze) {
 	HASHKEY hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry = &IdaInfo->HashTable[ hashkey ];
 
@@ -151,7 +151,7 @@ HASHENTRY *GetHashTable(MAZE *maze) {
 	return(NULL);
 }
 
-void PSSetPathFlag(MAZE *maze)
+void PSSetPathFlag(const MAZE *maze)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -159,7 +159,7 @@ void PSSetPathFlag(MAZE *maze)
 	entry->pathflag = 1;
 }
 
-void PSUnSetPathFlag(MAZE *maze)
+void PSUnSetPathFlag(const MAZE *maze)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -167,7 +167,7 @@ void PSUnSetPathFlag(MAZE *maze)
 	entry->pathflag = 0;
 }
 
-void PSClearHashTable(MAZE *maze)
+void PSClearHashTable(const MAZE *maze)
 /* clear a certain entry in the hashtable */
 {
   HASHKEY    hashkey = maze->hashkey&HASHMASK;
@@ -178,7 +178,7 @@ void PSClearHashTable(MAZE *maze)
   entry->down = 0;
 }
 
-HASHENTRY *PSStoreHashTable(MAZE *maze, int down, int min_h, int pathflag)
+HASHENTRY *PSStoreHashTable(const MAZE *maze, int down, int min_h, int pathflag)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -200,7 +200,7 @@ HASHENTRY *PSStoreHashTable(MAZE *maze, int down, int min_h, int pathflag)
 	return(entry);
 }
 
-HASHENTRY *PSGetHashTable(MAZE *maze) {
+HASHENTRY *PSGetHashTable(const MAZE *maze) {
 	HASHKEY hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry = &IdaInfo->HashTable[ hashkey ];
 
@@ -230,7 +230,7 @@ HASHKEY NormHashKey(MAZE *maze) {
 	return(hashkey);
 }
 
-HASHKEY UpdateHashKey( MAZE *maze, UNMOVE *move) {
+HASHKEY UpdateHashKey( MAZE *maze, const UNMOVE *move) {
 /* Updates the HashKey of maze according to UNMOVE, and returns it:
    Assumtion, Moves was made before calling this procedure */
 
@@ -239,7 +239,7 @@ HASHKEY UpdateHashKey( MAZE *maze, UNMOVE *move) {
 	return(maze->hashkey);
 }
 
-unsigned long RandomTable32[1792] = {
+uint32_t RandomTable32[1792] = {
 0x7462cdf7,0x47b7a5f6,0x1e232b82,0x42db26cd,0x03ce62c9,0x4e8e22d0,0x237f9bfc,0x12a384ef,
 0x7a25810b,0x52f3a8da,0x789478a6,0x2fbca201,0x29625d3d,0x08d86e94,0xeb2ee000,0xa87cf97c,
 0xeb4987df,0x92990981,0xdb8cfc8a,0x86a5090a,0x42e70d71,0x5751af18,0x1c93a4c4,0x5f1293d7,
@@ -474,6 +474,6 @@ void InitRandom()
 {
   int i;
 
-  for( i = 0; i < 1972; i++ )
-    ((unsigned long *)RandomTable)[ i ] = RandomTable32[ i ];
+  for( i = 0; i < sizeof(RandomTable32)/sizeof(RandomTable32[0]); i++ )
+    ((uint32_t*)RandomTable)[ i ] = RandomTable32[ i ];
 }

@@ -23,15 +23,16 @@
 	(move).move_dist =1; (move).from =ifrom; (move).last_over =ifrom;\
 	(move).macro_id =0; (move).to =ito; (move).value =v; (move).man=manp;
 
-int DirToDiff[8] = {1,YSIZE,-1,-YSIZE,1+YSIZE,-1+YSIZE,-1-YSIZE,1-YSIZE};
-int  OppDir[8] = {2,3,0,1,6,7,4,5};
-int NextDir[8] = {1,2,3,0,5,6,7,4};
-int PrevDir[8] = {3,0,1,2,7,4,5,6};
+const int DirToDiff[EXT_DIRECTION_NUM] = {1,YSIZE,-1,-YSIZE,1+YSIZE,-1+YSIZE,-1-YSIZE,1-YSIZE};
+const EXTDIRECTION  OppDir[EXT_DIRECTION_NUM] = {2,3,0,1,6,7,4,5};
+const EXTDIRECTION NextDir[EXT_DIRECTION_NUM] = {1,2,3,0,5,6,7,4};
+const EXTDIRECTION PrevDir[EXT_DIRECTION_NUM] = {3,0,1,2,7,4,5,6};
 
 int GenerateMoves(MAZE *maze, MOVE *moves) 
 {
 	PHYSID pos;
-	int i,dir;
+	int i;
+	DIRECTION dir;
 	int number_moves = 0;
 	BitString stones_done;
 
@@ -159,9 +160,7 @@ int ManDistMoveOrdering(int depth, int number_moves)
 	return(number_moves);
 }
 
-int MakeMove(MAZE *maze, MOVE *move, UNMOVE *ret, int targetpen)
-/* this is a routine that makes a STONE move, not merely a man move like
- * DoMove. It will just put the man to the new location */
+int MakeMove(MAZE *maze, const MOVE *move, UNMOVE *ret, int targetpen)
 {
 	int i;
 	int recalculate;	/* should we recalculate the distances */
@@ -234,7 +233,7 @@ int MakeMove(MAZE *maze, MOVE *move, UNMOVE *ret, int targetpen)
 	return(1);
 }
 
-int UnMakeMove(MAZE *maze, UNMOVE *unmove, int targetpen)
+int UnMakeMove(MAZE *maze, const UNMOVE *unmove, int targetpen)
 {
 	GMNODE **gmtree;
 	int	 new_h;
@@ -286,10 +285,11 @@ int DistToGoal(MAZE *maze, PHYSID start, PHYSID goal, PHYSID *last_over) {
         static PHYSID stack[XSIZE*YSIZE];
         static PHYSID from[XSIZE*YSIZE];
         static PHYSID dist[XSIZE*YSIZE];
-	static int s_visited[4][XSIZE*YSIZE];
+	static int s_visited[DIRECTION_NUM][XSIZE*YSIZE];
         PHYSID pos,fro,old_man;
 	char   old_stone;
-        int    goal_dist, next_in, next_out, dir, dis;
+        int    goal_dist, next_in, next_out, dis;
+		  DIRECTION dir;
 
 	for (pos=0; pos<XSIZE*YSIZE; pos++) {
 		for (dir=NORTH; dir<=WEST; dir++) {
@@ -604,7 +604,7 @@ int ValidSolution(MAZE *maze, MOVE *solution) {
 }
 
 
-int DiffToDir(int diff)
+DIRECTION DiffToDir(int diff)
 {
 	switch (diff) {
 	case -1:

@@ -32,27 +32,19 @@ const int DEFAULT_PRINT_PRIORITY =
 ;
 
 int main() {
-
-	char   *ev;
-	int    i;
-
 	InitRandom();
 	init_opts();
 	InitBS();
 	InitIDA(&MainIdaInfo);
 	IdaInfo = &MainIdaInfo;
 
-	ev = getenv("PP");
+	const char* ev = getenv("PP");
 	if (ev!=NULL) IdaInfo->PrintPriority=atoi(ev);
 	else IdaInfo->PrintPriority= DEFAULT_PRINT_PRIORITY;
 	Mprintf(2, "PrintPriority: %i\n", IdaInfo->PrintPriority);
 
-	i = InitTree(DlSup1);
-	LoadTree(i,DL1PATHFILE);
-	i = InitTree(DlSup2);
-	LoadTree(i,DL2PATHFILE);
-/*
-*/
+	LoadTrees(DL1PATHFILE, DL2PATHFILE);
+
 	signal(SIGINT,sigint);
 
 	MainMenu();

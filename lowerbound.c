@@ -69,7 +69,7 @@ int BetterLowerBound(MAZE *maze)
 
 }
 
-int MinMatch(MAZE *maze, PHYSID moveto, UNMOVE *unmove, int targetpen)
+int MinMatch(MAZE *maze, PHYSID moveto, const UNMOVE *unmove, int targetpen)
 /*********************************************************************
    if moveto == 0 then we need to force a full lb calculation, otherwise 
    go for optimizations using the fact that only one stone was moved.
@@ -196,13 +196,13 @@ END:
 	return(maze->h);
 }
 
-int BetterUpdateLowerBound(MAZE *maze, UNMOVE *unmove, int targetpen)
+int BetterUpdateLowerBound(MAZE *maze, const UNMOVE *unmove, int targetpen)
 /* Asumtion: Move is already made */
 {
 	return(MinMatch(maze,unmove->stoneto,unmove,targetpen));
 }
 
-int BetterUpdateLowerBound2(MAZE *maze, UNMOVE *unmove, int targetpen)
+int BetterUpdateLowerBound2(MAZE *maze, const UNMOVE *unmove, int targetpen)
 /* Asumtion: Move is already un-made */
 {
 	MinMatch(maze,unmove->stonefrom,unmove, targetpen);
@@ -227,7 +227,7 @@ int PlainLowerBound(MAZE *maze)
 	return(maze->h);
 }
 
-int PlainMinMatch(MAZE *maze, PHYSID moveto, UNMOVE *unmove)
+int PlainMinMatch(MAZE *maze, PHYSID moveto, const UNMOVE *unmove)
 {
 /*********************************************************************
    if moveto == 0 then we need to force a full lb calculation, otherwise 

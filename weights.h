@@ -35,21 +35,21 @@ void FreeDCache(MAZE *maze);
 DCACHE *InDCache(MAZE *maze, BitString stones_done);
 void GetNewDistances(MAZE *maze, UNMOVE *ret);
 
-DIST GetOptDist(MAZE *maze, PHYSID start, PHYSID goal, int dir);
-DIST GetShortestDist(MAZE *maze, PHYSID goal, PHYSID start);
+DIST GetOptDist(const MAZE *maze, PHYSID start, PHYSID goal, int dir);
+DIST GetShortestDist(const MAZE *maze, PHYSID goal, PHYSID start);
 
 #define WhereMan(maze,pos) GetManDir((maze),(pos),(maze)->manpos)
-int    GetManDir(MAZE *maze, PHYSID curr, PHYSID goal);
-int    GetScew(MAZE *maze, PHYSID from, PHYSID via);
-void   NewAddScew(MAZE *maze, DIST *add, DIST *scew,
+int    GetManDir(const MAZE *maze, PHYSID curr, PHYSID goal);
+int    GetScew(const MAZE *maze, PHYSID from, PHYSID via);
+void   NewAddScew(const MAZE *maze, DIST *add, DIST *scew,
 		PHYSID start, PHYSID curr, int from_dir);
 
-DIST XDistMan(MAZE *maze, PHYSID from, PHYSID to);
-DIST XDistStone(MAZE *maze, PHYSID from, PHYSID to);
+DIST XDistMan(const MAZE *maze, PHYSID from, PHYSID to);
+DIST XDistStone(const MAZE *maze, PHYSID from, PHYSID to);
 
-void  DistHist(MAZE *maze);
-void SDistHist(MAZE *maze);
-void XDistHist(MAZE *maze, int *all, int *scew);
-void PrintMazeDist(MAZE *maze, PHYSID to, PHYSID manpos);
+void  DistHist(const MAZE *maze);
+void SDistHist(const MAZE *maze);
+void XDistHist(const MAZE *maze, int *all, int *scew);
+void PrintMazeDist(const MAZE *maze, PHYSID to, PHYSID manpos);
 
 

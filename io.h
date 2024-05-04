@@ -12,8 +12,10 @@
 extern int PosNr;
 
 void ReadMaze(FILE *fp, MAZE *maze );
-void PrintMaze(MAZE *maze);
-char *PrintMove(MOVE move);
-char *HumanMove(MOVE move);
-void PrintBit2Maze(MAZE *maze,BitString marks);
-void PrintBit3Maze(MAZE *maze,BitString marks,BitString mark2, PHYSID manpos);
+void PrintMaze(const MAZE *maze);
+const char *PrintMove(MOVE move);
+const char *HumanMove(MOVE move);
+void PrintBit2Maze(const MAZE *maze, const BitString marks);
+void PrintBit3Maze(const MAZE *maze, const BitString marks, const BitString mark2, PHYSID manpos);
+// 0,0 - topleft of the maze
+void ToScreenCoord(PHYSID pos, int* x, int* y);

@@ -10,20 +10,19 @@
 */ 
 
 void     InitHashTables();
-void     UnSetPathFlag(MAZE *maze);
-void     SetPathFlag(MAZE *maze);
-void     ClearHashTable(MAZE *maze);
-HASHENTRY *StoreHashTable(MAZE *maze, int down, int min_h,
+void     UnSetPathFlag(const MAZE *maze);
+void     SetPathFlag(const MAZE *maze);
+void     ClearHashTable(const MAZE *maze);
+HASHENTRY *StoreHashTable(const MAZE *maze, int down, int min_h,
 		int area, int dl, int pen, int pathflag);
-HASHENTRY *GetHashTable(MAZE *maze);
-void     PSSetPathFlag(MAZE *maze);
-void     PSUnSetPathFlag(MAZE *maze);
-void     PSClearHashTable(MAZE *maze);
-HASHENTRY *PSStoreHashTable(MAZE *maze, int down, int min_h, int pathflag);
-HASHENTRY *PSGetHashTable(MAZE *maze);
+HASHENTRY *GetHashTable(const MAZE *maze);
+void     PSSetPathFlag(const MAZE *maze);
+void     PSUnSetPathFlag(const MAZE *maze);
+void     PSClearHashTable(const MAZE *maze);
+HASHENTRY *PSStoreHashTable(const MAZE *maze, int down, int min_h, int pathflag);
+HASHENTRY *PSGetHashTable(const MAZE *maze);
 HASHKEY  NormHashKey(MAZE *maze);
-HASHKEY  DeadHashKey(MAZE *maze);
-HASHKEY  UpdateHashKey( MAZE *maze, UNMOVE *move);
+HASHKEY  UpdateHashKey( MAZE *maze, const UNMOVE *move);
 
 void GGStoreHashTable(HASHKEY hashkey);
 int  GGGetHashTable(HASHKEY hashkey);

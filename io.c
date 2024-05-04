@@ -13,7 +13,7 @@
 
 int PosNr=0;
 
-void PrintMaze(MAZE *maze) {
+void PrintMaze(const MAZE *maze) {
 	int x,y,num_empty,pos;
 	char buff[XSIZE*2+2];
 
@@ -199,16 +199,22 @@ END_INPUT:
 	if (Options.autolocal == 1) SetLocalCut(0,0,0);
 }
 
-char *PrintMove(MOVE move) {
+const char *PrintMove(MOVE move) {
 
-	static char buff[20];
+	static char buff[20] = { 0 };
 
 	sprintf(buff,"(%02i:)%02i-%02i",move.man,move.from,move.to);
 	return(buff);
 }
 
-char *HumanMove(MOVE move) {
-	static char buff[50];
+void ToScreenCoord(PHYSID pos, int* x, int* y)
+{
+	*x = pos / YSIZE;
+	*y = YSIZE - pos % YSIZE - 1;
+}
+
+const char *HumanMove(MOVE move) {
+	static char buff[50] = { 0 };
 
 	if (ISDUMMYMOVE(move)) {
 		/*strcpy(buff,"AA-AA DummyMove");*/
@@ -224,7 +230,7 @@ char *HumanMove(MOVE move) {
 	return(buff);
 }
 
-void PrintBit2Maze(MAZE *maze,BitString marks) {
+void PrintBit2Maze(const MAZE *maze, const BitString marks) {
 	int x,y,num_empty,pos;
 	char buff[XSIZE*2+2];
 
@@ -247,7 +253,7 @@ void PrintBit2Maze(MAZE *maze,BitString marks) {
 	}
 }
 
-void PrintBit3Maze(MAZE *maze,BitString marks,BitString mark2, PHYSID manpos) {
+void PrintBit3Maze(const MAZE *maze, const BitString marks, const BitString mark2, PHYSID manpos) {
 	int x,y,num_empty,pos;
 	char buff[XSIZE*2+2];
 

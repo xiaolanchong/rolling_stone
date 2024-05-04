@@ -18,9 +18,11 @@ int       opdir[2] = {1, 0};
 BitString stones, walls, dead;
 int       notongoal;
 
-int Frozen(MAZE *maze, int dir_in, PHYSID pos)
+// dir_in  0 or 1
+BOOLTYPE Frozen(const MAZE *maze, int dir_in, PHYSID pos)
 {
-    int ret,pos1,pos2,dir;
+	 int ret, pos1, pos2;
+	 DIRECTION dir;
     /* is the stone frozen in one direction */
     if (!IsBitSetBS(maze->goal,pos)) notongoal = YES;
     ret = NO;
@@ -39,7 +41,7 @@ int Frozen(MAZE *maze, int dir_in, PHYSID pos)
     return(ret);
 }
 
-int DeadLock(MAZE *maze, MOVE *move) {
+BOOLTYPE DeadLock(const MAZE *maze, const MOVE *move) {
 /* We are using global variables for this routine, defined above! */
 /* This does not all deadlocks because it might not see a stone not on goal
  * that is frozen. In those cases, we have to make the move and then when we
@@ -63,7 +65,7 @@ int DeadLock(MAZE *maze, MOVE *move) {
 }
 
 
-int DeadLockOld(MAZE *maze, MOVE move) {
+BOOLTYPE DeadLockOld(MAZE *maze, MOVE move) {
 /* Does not catch this pattern:
     $#
     #
@@ -81,7 +83,7 @@ int DeadLockOld(MAZE *maze, MOVE move) {
 	if (  (IsBitSetBS(maze->out,move.to+frontdiff))
 	    &&(  (IsBitSetBS(maze->out,move.to+sidediff))
 	       ||(IsBitSetBS(maze->out,move.to-sidediff))))
-		return(1);
+		return(YES);
 
 	/* check the four-block */
 	if (  (IsBitSetBS(maze->out,move.to+frontdiff))
@@ -91,19 +93,19 @@ int DeadLockOld(MAZE *maze, MOVE move) {
 			||(maze->PHYSstone[move.to+sidediff]>=0))
 		    && (  (IsBitSetBS(maze->out,move.to+sidediff+frontdiff))
 			||(maze->PHYSstone[move.to+sidediff+frontdiff]>=0))) 
-			return(1);
+			return(YES);
 		sidediff = -sidediff;
 		if (   (  (IsBitSetBS(maze->out,move.to+sidediff))
 			||(maze->PHYSstone[move.to+sidediff]>=0))
 		    && (  (IsBitSetBS(maze->out,move.to+sidediff+frontdiff))
 			||(maze->PHYSstone[move.to+sidediff+frontdiff]>=0))) 
-			return(1);
+			return(YES);
 	}
-	return(0);
+	return(NO);
 }
 
-int DeadLock2(MAZE *maze, MOVE *move) {
-	int     dir,dirloop;
+BOOLTYPE DeadLock2(const MAZE *maze, const MOVE *move) {
+	DIRECTION     dir,dirloop;
 
 	if (Options.dl2_mg==0) return(0);
 	if (AvoidThisSquare!=0) return(0);
@@ -129,12 +131,12 @@ int DeadLock2(MAZE *maze, MOVE *move) {
 						move->to-DirToDiff[dirloop],
 						OppDir[dirloop]))))) {
 				/* move is possible */
-				return(0);
+				return(NO);
 			}
 		}
 		/* deadlock */
-		return(1);
+		return(YES);
 	} 
-	return(0);
+	return(NO);
 }
 

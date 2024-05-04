@@ -47,12 +47,12 @@ void IncCounter(HISTOGRAM *hist, int index)
 	}
 }
 
-float GetAvgHist(HISTOGRAM *hist)
+float GetAvgHist(const HISTOGRAM *hist)
 {
 	return(((float)hist->total_sum)/hist->total_count);
 }
 
-void PrintHist(HISTOGRAM *hist)
+void PrintHist(const HISTOGRAM *hist)
 {
 
 	int line,mark;
@@ -83,7 +83,7 @@ void PrintHist(HISTOGRAM *hist)
 		GetAvgHist(hist));
 }
 
-void PrintHist2(HISTOGRAM *hist, HISTOGRAM *hist2)
+void PrintHist2(const HISTOGRAM *hist, const HISTOGRAM *hist2)
 {
 
 	int line,mark;

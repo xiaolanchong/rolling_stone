@@ -30,12 +30,12 @@ void InitBS() {
    }                         
 }
 
-int  Is0BS(BitString a) {
+BOOLTYPE  Is0BS(const BitString a) {
 	int i; for (i=0; i<NUMBERINTS; i++) if (a[i]!=0) return(0);
 	return(1);
 }
 
-int Isnt0BS( BitString a ) {
+BOOLTYPE Isnt0BS(const BitString a ) {
   int i;
 
   for( i = 0; i < NUMBERINTS; i++ )
@@ -51,14 +51,14 @@ int NumberBitsInt(int a) {
 	return(r);
 }
 
-int NumberBitsBS(BitString a) {
+int NumberBitsBS(const BitString a) {
 	int i,r=0;
 	unsigned char *c = (unsigned char *) a;
 	for (i=0; i<sizeof(BitString); i++) r+=BitNumber[c[i]];
 	return(r);
 }
 
-void  PrintBS(BitString a) {
+void  PrintBS(const BitString a) {
 	int i;
 	Mprintf( 0, "-%i-\n",NUMBERINTS);fflush(stdout);
 	PRINTBASETYPE(a[NUMBERINTS-1]);
@@ -68,7 +68,7 @@ void  PrintBS(BitString a) {
 	Mprintf( 0, "\n");
 }
 
-void PrintBitMaze(BitString a) {
+void PrintBitMaze(const BitString a) {
 	int x,y;
 
 	for (y = YSIZE-1; y>=0; y--) {
@@ -81,7 +81,7 @@ void PrintBitMaze(BitString a) {
 	fflush(stdout);
 }
 
-int FindAnySet(BitString a)
+PHYSID FindAnySet(const BitString a)
 {
 	int x,y;
 
@@ -112,7 +112,7 @@ static char _foobits[ 256 ] = {
 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
 };
 
-int FindFirstSet( BitString bs )
+int FindFirstSet( const BitString bs )
 {
   int i, t;
 
@@ -131,12 +131,12 @@ int FindFirstSet( BitString bs )
 }
 
 
-int  EqualBS(BitString a, BitString b) {
+BOOLTYPE  EqualBS(const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if (a[i] != b[i]) return(0);
 	return(1);
 }
 
-int  AllBitsSetBS(BitString x, BitString bits) {
+BOOLTYPE  AllBitsSetBS(const BitString x, const BitString bits) {
   int i;
 
   for( i = 0; i < NUMBERINTS; i++ )
@@ -145,89 +145,89 @@ int  AllBitsSetBS(BitString x, BitString bits) {
   return 1;
 }
 
-void UnsetBS(BitString x, BitString bits) {
+void UnsetBS(BitString x, const BitString bits) {
 	int i; for (i=0; i<NUMBERINTS; i++) x[i] &= ~bits[i];
 }
 
-void BitAndNotBS(BitString r, BitString a, BitString b) {
+void BitAndNotBS(BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] & ~b[i];
 }
 
-void BitAndNotButOrBS(BitString r, BitString a, BitString b, BitString c) { 
+void BitAndNotButOrBS(BitString r, const BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] & (~b[i] | c[i]);
 }
 
-void BitAndAndBS(BitString r, BitString a, BitString b, BitString c) {
+void BitAndAndBS(BitString r, const BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] & b[i] & c[i];
 }
 
-void BitAndAndNotBS(BitString r, BitString a, BitString b, BitString c) {
+void BitAndAndNotBS(BitString r, const BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] & b[i] & ~c[i];
 }
 
-void BitAndBS(BitString r, BitString a, BitString b) {
+void BitAndBS(BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] & b[i];
 }
 
-void BitNandBS(BitString r, BitString a, BitString b) { 
+void BitNandBS(BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = ~(a[i] & b[i]);
 }
 
-void BitOrBS(BitString r, BitString a, BitString b) { 
+void BitOrBS(BitString r, const  BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = a[i] | b[i];
 }
 
-void BitOrAndEqBS(BitString a, BitString b, BitString c) { 
+void BitOrAndEqBS(BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] |= b[i] & c[i];
 }
 
-void BitNorBS(BitString r, BitString a, BitString b) { 
+void BitNorBS(BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = ~(a[i] | b[i]);
 }
 
-void BitNotBS(BitString r, BitString a) {
+void BitNotBS(BitString r, const BitString a) {
         int i; for (i=0; i<NUMBERINTS; i++) r[i] = ~a[i];
 }
 
 /******/
 
-void BitAndEqBS(BitString a, BitString b) {
+void BitAndEqBS(BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] &= b[i];
 }
 
-void BitNandEqBS(BitString a, BitString b) { 
+void BitNandEqBS(BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] = ~(a[i] & b[i]);
 }
 
-void BitOrEqBS(BitString a, BitString b) { 
+void BitOrEqBS(BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] |= b[i];
 }
 
-void BitNorEqBS(BitString a, BitString b) { 
+void BitNorEqBS(BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] = ~(a[i] | b[i]);
 }
 
-void BitAndNotEqBS(BitString a, BitString b) { 
+void BitAndNotEqBS(BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] &= ~b[i];
 }
 
-void BitAndNotButOrEqBS(BitString a, BitString b, BitString c) { 
+void BitAndNotButOrEqBS(BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) a[i] &= (~b[i] | c[i]);
 }
 
 
-void BitNotAndNotBS(BitString r, BitString a, BitString b) { 
+void BitNotAndNotBS(BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) r[i] = ~(a[i] | b[i]);
 }
 
-void BitNotAndNotAndNotBS(BitString r, BitString a, BitString b,
-			  BitString c) { 
+void BitNotAndNotAndNotBS(BitString r, const BitString a, const BitString b,
+	const BitString c) {
 	int i;
 
 	for (i = 0; i < NUMBERINTS; i++) r[i] = ~( a[i] | b[i] | c[i] );
 }
 
-void BitAndNotAndNotBS(BitString r, BitString a, BitString b, BitString c) { 
+void BitAndNotAndNotBS(BitString r, const BitString a, const BitString b, const BitString c) {
 	int i;
 
 	for (i = 0; i < NUMBERINTS; i++) r[i] = a[i] & ~b[i] & ~c[i];
@@ -236,33 +236,33 @@ void BitAndNotAndNotBS(BitString r, BitString a, BitString b, BitString c) {
 /******/
 
 
-int  LogAndBS (BitString a, BitString b) {
+BOOLTYPE  LogAndBS (const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if ((a[i] & b[i]) != 0) return(1);
 	return(0);
 }
-int  LogAndNotBS(BitString a, BitString b) {
+BOOLTYPE  LogAndNotBS(const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if ((a[i] & ~b[i]) != 0) return(1);
 	return(0);
 }
-int  LogAndAndNotBS(BitString a, BitString b, BitString c) {
+BOOLTYPE  LogAndAndNotBS(const BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) if (((a[i] & b[i]) & ~c[i]) != 0)
 		return(1);
 	return(0);
 }
-int  LogAndNotAndNotBS(BitString a, BitString b, BitString c) {
+int  LogAndNotAndNotBS(const BitString a, const BitString b, const BitString c) {
 	int i; for (i=0; i<NUMBERINTS; i++) if ((a[i] & ~b[i] & ~c[i]) != 0)
 		return(1);
 	return(0);
 }
-int  LogOrBS  (BitString a, BitString b) {
+BOOLTYPE  LogOrBS  (const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if ((a[i] | b[i]) != 0) return(1);
 	return(0);
 }
-int  LogOrNotBS (BitString a, BitString b) {
+BOOLTYPE  LogOrNotBS (const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if ((a[i] | ~b[i]) != 0) return(1);
 	return(0);
 }
-int  LogNorAndNotBS (BitString r, BitString a, BitString b) {
+BOOLTYPE  LogNorAndNotBS (const BitString r, const BitString a, const BitString b) {
 	int i; for (i=0; i<NUMBERINTS; i++) if (((r[i]^a[i])&~b[i])!=0) return(1);
 	return(0);
 }

@@ -15,11 +15,10 @@ extern MAZE *AreaMaze;
 extern MAZE *InsertMaze;
 
 int  PenMoveOrdering(int depth, int number_moves);
-int  NoMoreMoves(MAZE *maze, MOVE *last_move);
-int  PenMoveSuspected(MAZE *maze, MOVE *last_move);
+int  PenMoveSuspected(const MAZE *maze, const MOVE *last_move);
 int  PenMiniConflict(int penalty, int minimize);
 
-int  PenIsGoalNode(int g);
+BOOLTYPE  PenIsGoalNode(int g);
 int  ScanSearch(MAZE *maze);
 int  PenMove(MAZE *maze, HASHENTRY *entry, MOVE *last_move, int treedepth,
 	int targetpen);
@@ -30,14 +29,14 @@ int  PenIda(int treedepth, int g);
 int  PenMakeMove(MAZE *maze, MOVE *move, UNMOVE *ret, int targetpen);
 int  PenUnMakeMove(MAZE *maze, UNMOVE *unmove, int targetpen);
 int  PenLowerBound(MAZE *maze, int targetpen);
-int  PenMinMatch(MAZE *maze, PHYSID moveto, UNMOVE *unmove, int targetpen);
 int  PenUpdateLowerBound(MAZE *maze, PHYSID pos, int targetpen);
-PHYSID FindFarthestPosStone(MAZE *maze, BitString squares, 
-		      		  BitString already_visible);
+PHYSID FindFarthestPosStone(MAZE *maze, const BitString squares, 
+		      		  const BitString already_visible);
 
-void MarkReachPos(MAZE *maze, BitString reach, PHYSID manpos, int clear);
-int  FindFringeStones( MAZE *maze, BitString fs,
+void MarkReachPos(const MAZE *maze, BitString reach, PHYSID manpos, BOOLTYPE clear);
+int  FindFringeStones( const MAZE *maze, BitString fs,
 		      BitString no_reach, PHYSID move_to );
-int  WhichStones(MAZE *maze, BitString fs, BitString no_reach, int clear);
-int  AddMoreStones( MAZE *maze, BitString fs, BitString no_reach);
-int  AreaMove(MAZE *maze, MOVE *last_move, int treedepth, int targetpen);
+int  WhichStones(const MAZE *maze, BitString fs, BitString no_reach, BOOLTYPE clear);
+BOOLTYPE  AddMoreStones( const MAZE *maze, BitString fs, BitString no_reach);
+/* Return True (YES) if targetpen was achieved */
+BOOLTYPE  AreaMove(MAZE *maze, MOVE *last_move, int treedepth, int targetpen);

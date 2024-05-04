@@ -11,7 +11,7 @@
 
 #include "board.h"
 
-void Mprintf( int priority, char *format, ... )
+void Mprintf( int priority, const char *format, ... )
 {
    va_list argptr;
    static char msg[2000];
@@ -21,13 +21,13 @@ void Mprintf( int priority, char *format, ... )
    	vsprintf( msg, format, argptr );
    	va_end( argptr );
 
-        printf( msg );		/* This is the only printf in the entire
+        printf( "%s", msg);		/* This is the only printf in the entire
 				 * program!!!!!! */
         fflush(stdout);
    }
 }
 
-void Debug( int level, int indent, char *format, ... )
+void Debug( int level, int indent, const char *format, ... )
 /*
 	0: Highest priority, prints exit messages and error stuff
 	2: Highest level stuff, like loading and saving mazes
@@ -62,7 +62,7 @@ void Debug( int level, int indent, char *format, ... )
    }
 }
 
-void Assert(int cond, char *format, ...) {
+void Assert(int cond, const char *format, ...) {
 
    va_list argptr;
    char msg[2000];

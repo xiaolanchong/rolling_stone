@@ -17,9 +17,9 @@
 #define GTVAny(x)
 #endif
 
-int  GTVOpen( int d, char fen[] );
-void GTVNodeEnter( int d, int alpha, int beta, char move[], int type );
-void GTVNodeExit( int d, int score, char *best_move );
+BOOLTYPE  GTVOpen( int d, const char* fen );
+void GTVNodeEnter( int d, int alpha, int beta, const char* move, int type );
+void GTVNodeExit( int d, int score, const char *best_move );
 void GTVClose( );
-char *GTVFen(MAZE *maze);
-char *GTVMove(MOVE move);
+const char *GTVFen(const MAZE *maze);
+const char *GTVMove(MOVE move);

@@ -9,7 +9,7 @@
 ** implied warranty.
 */ 
 
-int DeadLock(MAZE *maze, MOVE *move);
-int DeadLock2(MAZE *maze, MOVE *move);
+BOOLTYPE DeadLock(const MAZE *maze, const MOVE *move);
+BOOLTYPE DeadLock2(const MAZE *maze, const MOVE *move);
 
 extern int opdir[2];

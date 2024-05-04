@@ -24,7 +24,8 @@ int bits[MAX_LOCATIONS];	/* the bits that are set if a square is
 PHYSID  FindEndTunnel(MAZE *maze, PHYSID pos, int diff, PHYSID *last_over) {
 
 	PHYSID next;
-	int    from_dir,next_dir,waystogo,dir;
+	int    from_dir, next_dir, waystogo;
+	DIRECTION dir;
 
 	next = pos + diff;
 
@@ -232,7 +233,7 @@ void StoneReach(MAZE *maze, BitString v, PHYSID entr, PHYSID location)
         PHYSID pos,fro;
         int next_in, next_out, dir, curr_dir;
 	static short     touched_from[XSIZE*YSIZE];
-	static short     dir2bit[4] = {1,2,4,8};
+	static short     dir2bit[DIRECTION_NUM] = {1,2,4,8};
 
 	from[0]  = entr;
         stack[0] = location;
@@ -1370,60 +1371,60 @@ GMNODE *BuildGMTree(MAZE *maze, GROOM *groom, int depth, int allow_null)
 	   CHECKEND;
 
 	   /* get the next bunch with 1 turnoff only */
-	   if (sat_prop & PROP_1000 == 0) {
+	   if ((sat_prop & PROP_1000) == 0) {
 		   prop = PROP_1011; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1101; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1110; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0100 == 0) {
+	   if ((sat_prop & PROP_0100) == 0) {
 		   prop = PROP_0111; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1101; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1110; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0010 == 0) {
+	   if ((sat_prop & PROP_0010) == 0) {
 		   prop = PROP_0111; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1011; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1110; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0001 == 0) {
+	   if ((sat_prop & PROP_0001) == 0) {
 		   prop = PROP_0111; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1011; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1101; number += (n = CPGM(prop)); CHECKEND;
 	   }
 
 	   /* get the next bunch with 2 turnoffs */
-	   if (sat_prop & PROP_1000 == 0) {
+	   if ((sat_prop & PROP_1000) == 0) {
 		   prop = PROP_1100; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1010; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_1001; number += (n = CPGM(prop)); CHECKEND;
 	   }
 
-	   if (sat_prop & PROP_0100 == 0) {
+	   if ((sat_prop & PROP_0100) == 0) {
 		   prop = PROP_1100; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0110; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0101; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0010 == 0) {
+	   if ((sat_prop & PROP_0010) == 0) {
 		   prop = PROP_1010; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0110; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0011; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0001 == 0) {
+	   if ((sat_prop & PROP_0001) == 0) {
 		   prop = PROP_1001; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0101; number += (n = CPGM(prop)); CHECKEND;
 		   prop = PROP_0011; number += (n = CPGM(prop)); CHECKEND;
 	   }
 
 	   /* get the next bunch with 3 turnoffs */
-	   if (sat_prop & PROP_1000 == 0) {
+	   if ((sat_prop & PROP_1000) == 0) {
 		   prop = PROP_1000; number += (n = CPGM(prop)); CHECKEND;
-	   } if (sat_prop & PROP_0100 == 0) {
+	   } if ((sat_prop & PROP_0100) == 0) {
 		   prop = PROP_0100; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0010 == 0) {
+	   if ((sat_prop & PROP_0010) == 0) {
 		   prop = PROP_0010; number += (n = CPGM(prop)); CHECKEND;
 	   }
-	   if (sat_prop & PROP_0001 == 0) {
+	   if ((sat_prop & PROP_0001) == 0) {
 		   prop = PROP_0001; number += (n = CPGM(prop)); CHECKEND;
 	   }
 

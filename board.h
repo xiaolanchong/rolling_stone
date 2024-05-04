@@ -21,6 +21,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
@@ -42,6 +43,7 @@ extern int PATTERNRATIO;
   #define TRUE 		1
   #define FALSE 	0
 #endif
+#define BOOLTYPE	int
 #define YES  		1
 #define NO    		0
 
@@ -95,28 +97,37 @@ extern int PATTERNRATIO;
 
 #define EMPTY 	0	/* Nothing on square */
 #define NONE 	0	/*  */
+
+typedef int DIRECTION; // north, south, west, east
+typedef int EXTDIRECTION; // DIRECTION + diagonal moves
+
 #define NODIR 	 -1	/* No direction */
 #define NORTH	  0	/* Possible to go there? */
 #define EAST	  1	/* Possible to go there? */
 #define SOUTH	  2	/* Possible to go there? */
 #define WEST	  3	/* Possible to go there? */
+#define DIRECTION_NUM (WEST + 1)
 #define NORTHEAST 4
 #define SOUTHEAST 5
 #define SOUTHWEST 6
 #define NORTHWEST 7
+#define EXT_DIRECTION_NUM (NORTHWEST + 1)
 
 typedef unsigned short USHORT;
+// 2D coordinates in maze, see XY2ID to convert 2D to 1D, 0 is the left-bottom corner,
+// the maze is aligned to the top left
 typedef          short PHYSID;
 /* typedef 	 short DIST;  JS */
 typedef unsigned char  DIST;
-typedef unsigned long long HASHKEY;
+typedef uint64_t HASHKEY;
 
-typedef DIST STNDIST[4][XSIZE*YSIZE][XSIZE*YSIZE];	/* dir, from, to */
+typedef DIST STNDIST[DIRECTION_NUM][XSIZE*YSIZE][XSIZE*YSIZE];	/* dir, from, to */
 typedef DIST MANDIST[XSIZE*YSIZE][XSIZE*YSIZE];
-typedef char CONN[4][YSIZE*XSIZE];			/* which of the 4
+typedef char CONN[DIRECTION_NUM][YSIZE*XSIZE];			/* which of the 4
 							 * dirs are connected
 							 * at this position */
 
+// Lower bound
 typedef struct {
 	char stoneidx; /* JS */	/* referenced by goalidx */
 	char goalidx;  /* JS */ /* referenced by stoneidx */
@@ -268,6 +279,7 @@ typedef struct {
 	BitString stones;
 } TESTED;
 
+// Distance cache
 typedef struct {
 	BitString    stones_done;
 	BitString    one_way;
@@ -313,7 +325,7 @@ typedef struct {
 	int	     currentmovenumber;	/* basically index into IDAARRAY */
 	signed char  PHYSstone[ XSIZE * YSIZE ]; /* stone idx into stone table*/
 
-	LBENTRY     *lbtable;
+	LBENTRY     *lbtable; // size is number_goals
 	STN         *stones;
 
 		/* changes when stones get fixed on goal squares */
@@ -330,8 +342,8 @@ typedef struct {
 	BitString    out;
 	BitString    wall;
 	BitString    dead;
-	BitString    M[4];		/* Can the man go there? */
-	BitString    S[4];		/* Can the stone move there? */
+	BitString    M[DIRECTION_NUM];		/* Can the man go there? */
+	BitString    S[DIRECTION_NUM];		/* Can the stone move there? */
 
 	GMNODE     **gmtrees;
 	short        groom_index[XSIZE*YSIZE];
@@ -393,7 +405,7 @@ typedef struct {
 	long       AbortNodeCount;
 	int        ForwDepthLimit;	/* primarily used for   */
 	int        base_indent;
-	int	   MiniFlag;		/* set to YES in PenMiniConflict */
+	BOOLTYPE	   MiniFlag;		/* set to YES in PenMiniConflict */
 
 	int        CurrentSolutionDepth;
 
@@ -426,7 +438,7 @@ typedef struct {
 	int 	   PrintPriority;
 	int	   TimeOut;
 	int	   TimeOutType;
-	int	   TimedOut;
+	BOOLTYPE  TimedOut;
 } IDA;
 
 /************ exports ******************/
@@ -456,8 +468,7 @@ typedef struct {
 #include "histogram.h"
 #include "time.h"
 
-extern MOVE DummyMove;
-extern int  PP;
+extern const MOVE DummyMove;
 extern long area_pos_nc, area_neg_nc;	/* node counts for pos/neg searches */
 extern int  area_pos_sc, area_neg_sc;	/* search count for pos/neg */
 extern long dl_pos_nc, dl_neg_nc;	/* node counts for pos/neg searches */

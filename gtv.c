@@ -25,7 +25,7 @@ static struct {
 } Tree[MAX_GTV_DEPTH];
 
 
-int GTVOpen( int depth, char fen[] )
+BOOLTYPE GTVOpen( int depth, const char* fen )
 {
    int  d;
    char name[15];
@@ -48,7 +48,7 @@ int GTVOpen( int depth, char fen[] )
 }
 
 
-void GTVNodeEnter( int d, int alpha, int beta, char *move, int type )
+void GTVNodeEnter( int d, int alpha, int beta, const char *move, int type )
 {
    Tree[d].node_no = ++TreeNodes;
    Tree[d].alpha = alpha;
@@ -58,9 +58,9 @@ void GTVNodeEnter( int d, int alpha, int beta, char *move, int type )
 }
 
 
-void GTVNodeExit( int d, int score, char *move )
+void GTVNodeExit( int d, int score, const char *move )
 {
-  char *type_chr = "PNQ";
+  const char *type_chr = "PNQ";
 
   if (d) {
      Tree[d-1].branching++;
@@ -102,7 +102,7 @@ void GTVEval()
 /* GTV can find a position in the tree */
 /* Set nullmove */
 
-char *GTVFen(MAZE *maze) {
+const char *GTVFen(const MAZE *maze) {
         int x,y,num_empty;
         static char buff[XSIZE*YSIZE*2];
 	char e_buff[5];
@@ -154,7 +154,7 @@ char *GTVFen(MAZE *maze) {
 	return(buff);
 }
 
-char *GTVMove(MOVE move) {
+const char *GTVMove(MOVE move) {
 	static char buff[50];
 
 	if (ISDUMMYMOVE(move)) {

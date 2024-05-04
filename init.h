@@ -12,9 +12,9 @@
 void  InitMaze(MAZE *maze);
 void  ResetMaze(MAZE *maze);
 void  DelMaze(MAZE *maze);
-MAZE *CopyMaze(MAZE *maze); 
+MAZE *CopyMaze(const MAZE *maze); 
 void  DelCopiedMaze(MAZE *maze);
-MAZE *UpdateMaze(MAZE *maze, MAZE *target_maze);
+MAZE *UpdateMaze(const MAZE *maze, MAZE *target_maze);
 
-MAZE *SaveMaze(MAZE *maze, SAVEMAZE *savemaze);
+const MAZE *SaveMaze(const MAZE *maze, SAVEMAZE *savemaze);
 MAZE *RestoreMaze(MAZE *maze, SAVEMAZE *savemaze);

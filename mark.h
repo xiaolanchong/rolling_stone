@@ -12,10 +12,9 @@
 extern PHYSID AvoidThisSquare;
 
 void MarkAll(MAZE *maze);
-void MarkOut(MAZE *maze, PHYSID pos);
-void MarkDead(MAZE *maze);
 void MarkOneConnected(MAZE *maze);
 void MarkTun(MAZE *maze);
+/* mark to goal, put the square to which all the goals are */
 void MarkTG(MAZE *maze);
 
 void MarkReach(MAZE *maze);
@@ -27,5 +26,3 @@ void MarkReachQuick(MAZE *maze, PHYSID from);
 int  IsStoneDone(MAZE *maze, PHYSID moveto);
 void PropStonesDone(MAZE *maze, PHYSID pos);
 void SetAllStonesDone(MAZE *maze);
-
-

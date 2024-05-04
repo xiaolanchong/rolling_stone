@@ -11,6 +11,10 @@
 
 #include "board.h"
 
+/* recursive function to unmark the inner fields from the out-flag */
+static void MarkOut(MAZE* maze, PHYSID pos);
+static void MarkDead(MAZE* maze);
+
 void MarkAll(MAZE *maze) {
 
 	SR(Debug(2,0,"MarkOut\n"));
@@ -45,8 +49,8 @@ void MarkAll(MAZE *maze) {
 PHYSID   AvoidThisSquare=0;
 
 void MarkTG(MAZE *maze) {
-/* mark to goal, put the square to which all the goals are */
-	int    i,j,k,count,dir1,dir2,dir3;
+	int    i, j, k, count;
+	DIRECTION dir1, dir2, dir3;
 	TOGOAL to_goals[XSIZE*YSIZE];
 	PHYSID goalloc,togoal;
 	DIST   w;
@@ -179,7 +183,6 @@ void MarkTG(MAZE *maze) {
 }
 
 void MarkOut(MAZE *maze, PHYSID pos) {
-/* recursive function to unmark the inner fields from the out-flag */
 	int dir;
 	
 	if (!IsBitSetBS(maze->out,pos)) return;
@@ -593,7 +596,7 @@ int Frozen2(MAZE *maze, int dir_in, PHYSID pos)
 
 int IsStoneDone(MAZE *maze, PHYSID moveto)
 /* This routine sets stones_done with all the stones that are fixed by the
- * lat move that put a stone on moveto. We have to iteratively look at all
+ * last move that put a stone on moveto. We have to iteratively look at all
  * the different moves that might be effected, e.g. if there is a stone
  * against a wall, pushing one beside it will fix both, not just the one
  * moved. */

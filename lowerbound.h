@@ -9,10 +9,10 @@
 ** implied warranty.
 */ 
 
-int MinMatch(MAZE *maze, PHYSID moveto, UNMOVE *unmove, int targetpen);
+int MinMatch(MAZE *maze, PHYSID moveto, const UNMOVE *unmove, int targetpen);
 int BetterLowerBound(MAZE *maze);
-int BetterUpdateLowerBound(MAZE *maze, UNMOVE *unmove, int targetpen);
-int BetterUpdateLowerBound2(MAZE *maze, UNMOVE *unmove, int targetpen);
+int BetterUpdateLowerBound(MAZE *maze, const UNMOVE *unmove, int targetpen);
+int BetterUpdateLowerBound2(MAZE *maze, const UNMOVE *unmove, int targetpen);
 
 int PlainLowerBound(MAZE *maze);
-int PlainMinMatch(MAZE *maze, PHYSID moveto, UNMOVE *unmove);
+int PlainMinMatch(MAZE *maze, PHYSID moveto, const UNMOVE *unmove);

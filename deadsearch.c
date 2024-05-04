@@ -34,11 +34,7 @@ int DeadIsGoalNode(int g)
 	return(0);
 }
 
-/* Try to find out if we can move this stone still to a goal,
-   include those that might be creating a deadlock,
-   after finding that this is a deadlock, find the minimal set of
-   stones belonging to a deadlock */
-int  DeadMove(MAZE *maze, MOVE *last_move, int treedepth)
+BOOLTYPE  DeadMove(MAZE *maze, const MOVE *last_move, int treedepth)
 {
 	BitString	visible,relevant;
 	PHYSID		pos;
@@ -95,7 +91,7 @@ int  DeadMove(MAZE *maze, MOVE *last_move, int treedepth)
 			SR(Debug(4,0," %li, stones: %i, result: %i)\n", 
 				node_count, number_stones, result));
 			Options.mc_gm=old_gm;
-			return(1);
+			return(YES);
 		}
 		/* Turn off all goal stones */
 		/* BitAndNotButOrEqBS(IdaInfo->IdaStoneSquares,
@@ -138,10 +134,10 @@ END:
 	SR(Debug(4,0,"DeadMove ## End search - ALIVE (nodes: %li stones: %i)\n",
 		node_count,number_stones));
 	Options.mc_gm=old_gm;
-	return(0);      
+	return(NO);      
 }
 
-void DeadDeactivateStones(MAZE *maze, BitString visible)
+void DeadDeactivateStones(MAZE *maze, const BitString visible)
 {
 	PHYSID    pos;
 
@@ -160,7 +156,7 @@ void DeadDeactivateStones(MAZE *maze, BitString visible)
 	DeadLowerBound(maze,ENDPATH);
 }
 
-int DeadMoveSuspected(MAZE *maze, MOVE *last_move)
+BOOLTYPE DeadMoveSuspected(const MAZE *maze, const MOVE *last_move)
 {
 /* return 1 if we suspect a deadlock search is beneficial, here should be
  * all the heuristic stuff that we hope will basically have a good guess at
@@ -189,15 +185,15 @@ int DeadMoveSuspected(MAZE *maze, MOVE *last_move)
 				maze->reach,last_move->to))
 			return(0); 
 		else */
-			return(1);
+			return(YES);
 	}
 
-	return(0);
+	return(NO);
 
 }
 
-PHYSID FindClosestPosStone(MAZE *maze, BitString squares, 
-		      		  BitString already_visible)
+PHYSID FindClosestPosStone(const MAZE *maze, const BitString squares, 
+		      		  const BitString already_visible)
 /* Find the square (position) the in squares that has a stone on it
  * that is not already visible */
 {
@@ -218,8 +214,8 @@ PHYSID FindClosestPosStone(MAZE *maze, BitString squares,
 	return(pos);
 }
 
-PHYSID FindClosestPosMan(MAZE *maze, BitString squares, 
-		      		  BitString already_visible)
+PHYSID FindClosestPosMan(const MAZE *maze, const BitString squares, 
+	const BitString already_visible)
 /* Find the square (position) the in squares that has a stone on it
  * that is not already visible */
 {
@@ -264,8 +260,9 @@ void DeadMiniConflict(int minimize)
 		old_idainfo = IdaInfo;
 		InitIDA(&idainfo);
 		IdaInfo                 = &idainfo;
-		IdaInfo->IdaMaze        = SaveMaze(old_idainfo->IdaMaze,
-						   &savemaze);
+		SaveMaze(old_idainfo->IdaMaze,
+			&savemaze);
+		IdaInfo->IdaMaze = old_idainfo->IdaMaze;
 		CopyBS(IdaInfo->no_reach,old_idainfo->no_reach);
 		IdaInfo->ThresholdInc   = 2;
 		IdaInfo->AbortNodeCount = old_idainfo->pattern_node_limit;
@@ -322,10 +319,6 @@ void DeadMiniConflict(int minimize)
 }
 
 int DeadStartIda()
-/* Sets up all data structures and repeatedly calls ida with increasing 
-   threshold to guarantee optimal solutions, returns 0 if solution found 
-   otherwise the increase of maze->h by Threshold, if this is
-   ENDPATH there is no solution - deadlock */
 {
 
 	int       result=ENDPATH;
@@ -409,8 +402,6 @@ int DeadMoveOrdering(int depth, int number_moves)
 
 
 int DeadIda(int treedepth, int g) {
-/* the procedure that does the work at one node. it returns 
-	X - the smallest h underneath this node */
 
 	IDAARRAY  *S;
 	HASHENTRY *entry;
@@ -574,9 +565,7 @@ END_IDA:
 	return(min_h);
 }
 
-int DeadMakeMove(MAZE *maze, MOVE *move, UNMOVE *ret, int targetpen)
-/* this is a routine that makes a STONE move, not merely a man move like
- * DoMove. It will just put the man to the new location */
+int DeadMakeMove(MAZE *maze, const MOVE *move, UNMOVE *ret, int targetpen)
 {
 	int old_h;
 
@@ -636,7 +625,7 @@ int DeadMakeMove(MAZE *maze, MOVE *move, UNMOVE *ret, int targetpen)
 	return(1);
 }
 
-int DeadUnMakeMove(MAZE *maze, UNMOVE *unmove, int targetpen)
+void DeadUnMakeMove(MAZE *maze, const UNMOVE *unmove, int targetpen)
 {
 	int	 new_h;
 
@@ -674,13 +663,9 @@ int DeadUnMakeMove(MAZE *maze, UNMOVE *unmove, int targetpen)
 		/* This is either the start or a continuation of a goal move */
 		maze->goal_sqto = unmove->stonefrom;
 	} else maze->goal_sqto = -1;
-
-	return(0);
 }
 
 int DeadLowerBound(MAZE *maze, int targetpen) {
-/* This is a fast and bad lower bound - just the closest goal - since we
-remove stones when we hit goals */
 	char   stonei,goali;
 	PHYSID stonepos, goalpos;
 	DIST   dist;
@@ -714,7 +699,6 @@ remove stones when we hit goals */
 }
 
 int DeadUpdateLowerBound(MAZE *maze, PHYSID stonepos, int targetpen) {
-/* Update lowerbound after move to square pos */
 	char   stonei,goali;
 	PHYSID goalpos;
 	DIST   dist;

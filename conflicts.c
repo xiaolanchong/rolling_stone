@@ -107,7 +107,7 @@ void AddConflicts(PENALTY *p)
 
 /* 3 if a == b, 1 if a is a subset of b, 2 if b is a subset of a,
    0 otherwise */
-int SubsetBS( BitString a, BitString b )
+BOOLTYPE SubsetBS( const BitString a, const BitString b )
 {
   int ab = 1, ba = 2, i;
 
@@ -132,8 +132,8 @@ void RemoveConflict( CONFLICTS *c, int peni, int coni)
     }
 }
 
-int RemoveDuplicates( CONFLICTS *c, int penalty,
-		      BitString pattern, BitString no_reach )
+BOOLTYPE RemoveDuplicates( CONFLICTS *c, int penalty,
+		      const BitString pattern, const BitString no_reach )
 {
   int peni, coni;
 
@@ -153,7 +153,7 @@ int RemoveDuplicates( CONFLICTS *c, int penalty,
 	  case 3:
 	     if (!LogAndNotBS( c->pen[peni].cflts[coni].no_reach, no_reach )) {
 	    	c->number_removed++;
-	    	return 0;
+	    	return NO;
 	     }
 	     break;
 	  case 2:
@@ -169,13 +169,13 @@ int RemoveDuplicates( CONFLICTS *c, int penalty,
 	  case 3:
 	     if (!LogAndNotBS( c->pen[peni].cflts[coni].no_reach, no_reach )) {
 	         c->number_removed++;
-	         return 0;
+	         return NO;
 	     }
 	  }
 	}
     }
   }
-  return 1;
+  return YES;
 }
 
 void RemoveWorst( CONFLICTS *c )
@@ -208,7 +208,7 @@ void RemoveWorst( CONFLICTS *c )
   }
 }
 
-void InsertConflict(PENALTY *p, BitString c, BitString no_reach)
+void InsertConflict(PENALTY *p, const BitString c, const BitString no_reach)
 /* Insert c and no_reach into the PEANLTY structure */
 {
 	SR(Debug(CFLTS_PPLEVEL,0,"InsertConflict\n"));
@@ -228,7 +228,7 @@ PrintBit3Maze(IdaInfo->IdaMaze,c,no_reach,0);
 	p->number_conflicts++;
 }
 
-void AddConflict(CONFLICTS *c,BitString conflict,BitString no_reach,int penalty)
+void AddConflict(CONFLICTS *c, const BitString conflict, const BitString no_reach,int penalty)
 /* Penalty is total penalty, not relative */
 {
   int      n;
@@ -250,7 +250,7 @@ void AddConflict(CONFLICTS *c,BitString conflict,BitString no_reach,int penalty)
   }
 }
 
-int  GetPriorPostPen(MAZE *maze, int penalty, int *prior, int *post)
+BOOLTYPE  GetPriorPostPen(MAZE *maze, int penalty, int *prior, int *post)
 {
 	int i;
 	
@@ -270,7 +270,7 @@ int  GetPriorPostPen(MAZE *maze, int penalty, int *prior, int *post)
 	return( 1 );
 }
 
-void PrintConflicts(MAZE *maze, CONFLICTS *c)
+void PrintConflicts(MAZE *maze, const CONFLICTS *c)
 {
 	int	  peni;
 	int       coni;
@@ -310,7 +310,7 @@ void PrintConflicts(MAZE *maze, CONFLICTS *c)
 	maze->manpos = old_manpos;
 }
 
-void AddTestedPen(CONFLICTS *c, BitString relevant, BitString stones, 
+void AddTestedPen(CONFLICTS *c, const BitString relevant, const BitString stones, 
 				PHYSID manpos, PHYSID stonepos, int goodtested)
 {
 	TESTED *pen;
@@ -333,7 +333,7 @@ void AddTestedPen(CONFLICTS *c, BitString relevant, BitString stones,
 	c->number_pentested++;
 }
 
-void AddTestedDead(CONFLICTS *c, BitString relevant, BitString stones,
+void AddTestedDead(CONFLICTS *c, const BitString relevant, const BitString stones,
 				PHYSID manpos, PHYSID stonepos)
 {
 	TESTED *dead;
@@ -353,8 +353,8 @@ void AddTestedDead(CONFLICTS *c, BitString relevant, BitString stones,
 	c->number_deadtested++;
 }
 
-int WasTestedPen(CONFLICTS *c, BitString stones,
-		 BitString reach, PHYSID stonepos)
+int WasTestedPen(const CONFLICTS *c, const BitString stones,
+		 const BitString reach, PHYSID stonepos)
 {
 /* was this or a similar position tested before? Yes if
 	1) man square on same square AND
@@ -362,9 +362,6 @@ int WasTestedPen(CONFLICTS *c, BitString stones,
 	3) no stone is on relevant squares that was not before.
 Play with what are relevant squares (touched for a solution? close to the
 stones in the fianlpattern???) */	
-/* return position+1 of pattern tested */
-/* 0 if was not searched before */
-
 	int i;
 
 	if (Options.st_testd==0) return(0);
@@ -379,8 +376,8 @@ stones in the fianlpattern???) */
 	return(0);
 }
 
-int WasTestedDead(CONFLICTS *c, BitString stones,
-		  BitString reach, PHYSID stonepos)
+int WasTestedDead(const CONFLICTS *c, const BitString stones,
+		  const BitString reach, PHYSID stonepos)
 {
 	int i;
 
@@ -393,10 +390,10 @@ int WasTestedDead(CONFLICTS *c, BitString stones,
 			return(i+1);
 		}
 	}
-	return(0);
+	return(NO);
 }
 
-void PrintConflict( CONFLICTS *c, int peni, int coni )
+void PrintConflict(const CONFLICTS *c, int peni, int coni )
 {
 	Mprintf( 0, "Pattern %d, pen: %d\n", coni, c->pen[peni].penalty);
 	Mprintf( 0, "n_used: %ld, t_created: %ld, t_used: %ld\n",
@@ -408,7 +405,7 @@ void PrintConflict( CONFLICTS *c, int peni, int coni )
 		c->pen[peni].cflts[coni].no_reach,0);
 }
 
-void PrintTested(MAZE *maze, int num)
+void PrintTested(const MAZE *maze, int num)
 {
 	PrintBit3Maze(maze,
 		maze->conflicts->pentested[num].stones,
@@ -416,7 +413,7 @@ void PrintTested(MAZE *maze, int num)
 		maze->conflicts->pentested[num].manpos);
 }
 
-void  PrintMatches(MAZE *maze)
+void  PrintMatches(const MAZE *maze)
     /* This is the way we did GetPenalty first. Quick and dirty and we hope,
      * not very efficient, since we are trying to do it "better" */
 {
@@ -735,7 +732,7 @@ ENDLOOP:
 		}
 		/* penalty -= total_penalty;*/
 		penalty *= Options.overestim;
-		total_penalty = penalty;
+		total_penalty = (int)penalty;
 	}
 
 	SR(Debug(CFLTS_PPLEVEL,0,"GetPenalty: pen found: %i (s:%i)\n",
@@ -746,7 +743,7 @@ ENDLOOP:
 	if (   Options.hoverestim > 1.0
 	    && IdaInfo == &MainIdaInfo
 	    && maze->h < ENDPATH) {
-		hoverestim = maze->h * (Options.hoverestim - 1.0);
+		hoverestim = maze->h * (int)(Options.hoverestim - 1.0);
 		if (hoverestim&1) hoverestim++;
 	} else hoverestim = 0;
 	maze->pen  = total_penalty + hoverestim;

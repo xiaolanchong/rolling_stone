@@ -21,11 +21,8 @@
 
 IDA *IdaInfo;
 
-int StartIda(int nomacro) {
-/* Sets up all data structures and repeatedly calls ida with increasing 
-   threshold to guarantee optimal solutions, returns 0 if solution found 
-   otherwise the smallest heuristic value seen at any leaf node if this is
-   ENDPATH there is no solution - deadlock */
+int StartIda(BOOLTYPE nomacro) {
+
 
 	int       result=ENDPATH;
 	MAZE     *maze;
@@ -115,6 +112,8 @@ printf("removing goal macro\n");
 	return(result);
 }
 
+static void printSolution(const MOVE* solution, size_t size);
+
 void PrintSolution()
 {
 	MAZE     *maze;
@@ -147,6 +146,7 @@ void PrintSolution()
 	}
 	Debug(0,-1,"\n(moves: %i depth: %i)\n",g,i);
 	solution[i] = DummyMove;
+	printSolution(solution, i);
 	DelCopiedMaze(maze);
 
 	maze = CopyMaze(IdaInfo->IdaMaze);
@@ -156,7 +156,7 @@ void PrintSolution()
 	DelCopiedMaze(maze);
 }
 
-int IsGoalNodeNorm(int g)
+BOOLTYPE IsGoalNodeNorm(int g)
 {
 	int i;
 
@@ -387,7 +387,7 @@ void SetManStoneSquares(MAZE *maze, MOVE bestmove)
 	BitOrEqBS(IdaInfo->IdaManSquares,man);
 }
 
-int AbortSearch() {
+BOOLTYPE AbortSearch() {
 
 	/* stop any search if its limit is reached */
 	if (   MainIdaInfo.TimedOut == YES) return(1);
@@ -466,14 +466,14 @@ void SetLocalCut(int k, int m, int d)
 	}
 }
 
-int DistantSquares(PHYSID s1, PHYSID s2, short crowding)
+BOOLTYPE DistantSquares(PHYSID s1, PHYSID s2, short crowding)
 /* Return YES if the two squares are distant */
 {
        return( (((int)XDistMan(IdaInfo->IdaMaze,s1,s2)>(Options.local_d+crowding)))
 	     &&(((int)XDistMan(IdaInfo->IdaMaze,s2,s1)>(Options.local_d+crowding))));
 }
 
-int DistantMove(MAZE *maze, MOVE *last_move, MOVE *test_move)
+BOOLTYPE DistantMove(const MAZE *maze, const MOVE *last_move, const MOVE *test_move)
 /* Returns YES if test_move is considered a distant move to last_move */
 {
 	if ( DistantSquares(test_move->from,last_move->from,
@@ -484,14 +484,14 @@ int DistantMove(MAZE *maze, MOVE *last_move, MOVE *test_move)
 	return(NO);
 }
 
-short Crowding(MAZE *maze, PHYSID sq)
+short Crowding(const MAZE *maze, PHYSID sq)
 /* return a crowding number. The more stones in the vicinity, the larger the
  * crowding number */
 /* for now, the crowding number is the number stones "local" to sq */
 {
 	short crowding;
 	int i;
-	static short tbl[MAXSTONES] = {0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
+	static const short tbl[MAXSTONES] = {0,0,0,0,0,0,0,0, 1,1,1,1,1,1,1,1,
 			      2,2,2,2,2,2,2,2, 3,3,3,3,3,3,3,3, 4,4};
 	crowding = 0;
 	for (i=0; i<maze->number_stones; i++) {
@@ -500,7 +500,7 @@ short Crowding(MAZE *maze, PHYSID sq)
 	return(tbl[crowding]);
 }
 
-int RegisterMove(MOVE *move, int depth)
+BOOLTYPE RegisterMove(MOVE *move, int depth)
 /* Return YES if move should be cut off */
 /* do two things, do not allow switches back into previously visited areas
           and,    do not allow too many switches between previous moves */
@@ -555,3 +555,25 @@ int RegisterMove(MOVE *move, int depth)
 	return( NO );
 }
 
+static char toHex(int x)
+{
+	return ((x < 10) ? '0' : 'A') + x;
+}
+
+void printSolution(const MOVE* solution, size_t size)
+{
+	for (size_t i = 0; i < size; ++i)
+	{
+		int xm, ym;
+		int fromx, fromy, tox, toy;
+		ToScreenCoord(solution[i].man, &xm, &ym);
+		ToScreenCoord(solution[i].from, &fromx, &fromy);
+		ToScreenCoord(solution[i].to, &tox, &toy);
+		Debug(0, -1, " %c%c-%c%c-%c%c",
+			toHex(xm), toHex(ym),
+			toHex(fromx), toHex(fromy),
+			toHex(tox), toHex(toy)
+			);
+	}
+	Debug(0, -1, "\n");
+}

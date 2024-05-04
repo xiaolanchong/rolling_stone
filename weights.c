@@ -203,7 +203,7 @@ void SetDistDistances(MAZE *maze)
 	}
 }
 
-void DistHist(MAZE *maze)
+void DistHist(const MAZE *maze)
 /* Count Histogram for Xdists and print it out */
 {
 	PHYSID    from,to;
@@ -227,7 +227,7 @@ void DistHist(MAZE *maze)
 	PrintHist2(&h,&hg);	
 }
 
-void SDistHist(MAZE *maze)
+void SDistHist(const MAZE *maze)
 /* Count Histogram for Xdists and print it out */
 {
 	PHYSID    from,to;
@@ -253,7 +253,7 @@ void SDistHist(MAZE *maze)
 	PrintHist2(&h,&hg);	
 }
 
-void XDistHist(MAZE *maze, int *all, int *scew)
+void XDistHist(const MAZE *maze, int *all, int *scew)
 /* Count Histogram for Xdists and print it out */
 /* if all or scew are not NULL return the respective averages and only print 
  * histogram if either is NULL */
@@ -435,7 +435,7 @@ void SetDistDead(MAZE *maze)
 	}
 }
 
-int GetManDir(MAZE *maze, PHYSID pos, PHYSID manpos)
+int GetManDir(const MAZE *maze, PHYSID pos, PHYSID manpos)
 {
 	int  dir;
 	DIST dist;
@@ -453,7 +453,7 @@ int GetManDir(MAZE *maze, PHYSID pos, PHYSID manpos)
 	return(dir);
 }
 
-DIST GetShortestDist(MAZE *maze, PHYSID goal, PHYSID start) 
+DIST GetShortestDist(const MAZE *maze, PHYSID goal, PHYSID start) 
 /* this is not critical, just for plain lower bound */
 {
 	DIST   min_w,w;
@@ -467,7 +467,7 @@ DIST GetShortestDist(MAZE *maze, PHYSID goal, PHYSID start)
 	return(min_w);
 }
 
-DIST GetOptDist(MAZE *maze, PHYSID start, PHYSID goal, int dir) 
+DIST GetOptDist(const MAZE *maze, PHYSID start, PHYSID goal, int dir) 
 {
 	DIST w;
 	
@@ -491,7 +491,7 @@ DIST GetOptDist(MAZE *maze, PHYSID start, PHYSID goal, int dir)
 	}
 }
 
-int GetScew(MAZE *maze, PHYSID from, PHYSID via)
+int GetScew(const MAZE *maze, PHYSID from, PHYSID via)
 /* Returns YES if via is on an optimal path to any of the goals */
 {
 	DIST   scew,detour;
@@ -510,7 +510,7 @@ int GetScew(MAZE *maze, PHYSID from, PHYSID via)
 	return( NO );
 }
 
-void NewAddScew(MAZE *maze, DIST *add, DIST *scew,
+void NewAddScew(const MAZE *maze, DIST *add, DIST *scew,
 		PHYSID start, PHYSID curr, int from_dir)
 {
 	int    free,s_free;
@@ -539,7 +539,7 @@ void NewAddScew(MAZE *maze, DIST *add, DIST *scew,
 	*scew = GetScew(maze,start,curr);
 }
 
-DIST XDistMan(MAZE *maze, PHYSID from, PHYSID to)
+DIST XDistMan(const MAZE *maze, PHYSID from, PHYSID to)
 /* if xdist is set, uses d_weight, otherwise m_weight */
 {
 	if (Options.xdist == 1)
@@ -548,7 +548,7 @@ DIST XDistMan(MAZE *maze, PHYSID from, PHYSID to)
 		return(ManDist(maze,from,to));
 }
 
-DIST XDistStone(MAZE *maze, PHYSID from, PHYSID to)
+DIST XDistStone(const MAZE *maze, PHYSID from, PHYSID to)
 /* if xdist is set, uses d_weight, otherwise m_weight */
 {
 	if (Options.xdist == 1)
@@ -557,7 +557,7 @@ DIST XDistStone(MAZE *maze, PHYSID from, PHYSID to)
 		return(StoneDist(maze,from,to));
 }
 
-void PrintMazeDist(MAZE *maze, PHYSID to, PHYSID manpos)
+void PrintMazeDist(const MAZE *maze, PHYSID to, PHYSID manpos)
 {
 	int x,y,num_empty,pos,dist;
 	char buff[XSIZE*YSIZE*5+2];

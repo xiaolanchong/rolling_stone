@@ -26,7 +26,7 @@
 ###########
 ########### */
 
-DLSUP DlSup2[MAX_SQUARES] = {
+const DLSUP DlSup2[MAX_SQUARES] = {
 	{ 0,  1, NODIR,  1, 0, 0, 0, 0, NULL},		/* 1 */
 	{ 1,  0, NODIR,  0, 0, 0, 0, 0, NULL},		/* 2 */
 	{-1,  0, NODIR,  1, 0, 0, 0, 0, NULL},		/* 3 */
@@ -67,7 +67,7 @@ DLSUP DlSup2[MAX_SQUARES] = {
 ########### 
 */
 
-DLSUP DlSup1[MAX_SQUARES] = {
+const DLSUP DlSup1[MAX_SQUARES] = {
 	{ 0,  1, NODIR, 1, 0, 0, 0, 0, NULL},		/* 1 */
 	{ 1,  0, NODIR, 0, 0, 0, 0, 0, NULL},		/* 2 */
 	{-1,  0, NODIR, 1, 0, 0, 0, 0, NULL},		/* 3 */
@@ -96,50 +96,47 @@ DLSUP DlSup1[MAX_SQUARES] = {
 TREE  AllTrees[10];
 short NumberTrees = 0;
 
-int InitTree( DLSUP *sup ) {
-	int id;
-
-	id = NumberTrees++;
+int InitTree( const DLSUP *sup ) {
+	int id = NumberTrees++;
 	AllTrees[id].Sup   = sup;
 	AllTrees[id].CurrentLength = 0;
 	AllTrees[id].Array = NULL;
-	AllTrees[id].Next  = NULL;
-	AllTrees[id].Max = 0;
-	return(id);
+	return id;
 }
 
-void LoadTree( int id, char *filename) {
+void LoadTree(int id, const char *filename) {
 	TREE *t = &AllTrees[id];
 
 	FILE *fp;
 	struct stat buf;
 
-
 	if ((fp = fopen(filename,"rb")) != NULL) {
 		stat(filename, &buf);
 		t->CurrentLength = buf.st_size/sizeof(DLENTRY);
-		t->Array = (DLENTRY*)My_realloc(t->Array,
-					sizeof(DLENTRY)*t->CurrentLength);
-		t->Next  = (int*) My_realloc(t->Next,
-					sizeof(int)*t->CurrentLength);
-		t->Next[0] = fread(t->Array,sizeof(DLENTRY),
+		t->Array = (DLENTRY*)My_realloc(NULL,
+					sizeof(DLENTRY)*(int)t->CurrentLength);
+		t->CurrentLength = fread((DLENTRY*)t->Array,sizeof(DLENTRY),
 				   	t->CurrentLength,fp);
-		t->Max = t->Next[0] - 1;
 		fclose(fp);
 	} else {
 		My_exit(1,"Pattern DB not found!\n");
 	}
 }
 
-int DeadTree( MAZE *maze, PHYSID pos, int direction) {
-/* use the tree to determine if pushing a stone to "pos" in "direction" in
- * maze creates a deadlock */
+void LoadTrees(const char* sup1filename, const char* sup2filename)
+{
+	int id1 = InitTree(DlSup1);
+	LoadTree(id1, sup1filename);
+	int id2 = InitTree(DlSup2);
+	LoadTree(id2, sup2filename);
+}
 
+BOOLTYPE DeadTree(const MAZE *maze, PHYSID pos, DIRECTION direction) {
 	int    xofs, yofs; /* This is the multiplier to get the real offset */
 	int    index,i,tree_id;
 	PHYSID p;
 	SQUARE square;
-	TREE  *t;
+	const TREE  *t;
 
 	
 	if (maze->Phys[pos].goal >= 0) return(0);
@@ -209,9 +206,9 @@ TEST_MIRROR:
 		i++;
 	   } while (index>0);
 	   if (index == 0) {
-		return(1);
+		return(YES);
 	   }
 NEXT_PATTERN:;
 	}
-	return(0);
+	return(NO);
 }

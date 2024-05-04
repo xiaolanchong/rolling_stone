@@ -13,7 +13,7 @@
 
 void InitMaze(MAZE *maze)  {
 	PHYSID pos;
-	int dir;
+	DIRECTION dir;
 
 	maze->lbtable	     = NULL;
 	memset(&(maze->Phys),0,sizeof(PHYS)*XSIZE*YSIZE);
@@ -164,7 +164,7 @@ void DelMaze(MAZE *maze) {
 	maze->grooms = NULL;
 }
 
-MAZE *SaveMaze(MAZE *maze, SAVEMAZE *savemaze)
+const MAZE *SaveMaze(const MAZE *maze, SAVEMAZE *savemaze)
 /* Save important into from maze into savemaze for future restoration */
 {
 
@@ -184,7 +184,7 @@ MAZE *RestoreMaze(MAZE *maze, SAVEMAZE *savemaze)
     return(maze);
 }
 
-MAZE *UpdateMaze(MAZE *maze, MAZE *target_maze)
+MAZE *UpdateMaze(const MAZE *maze, MAZE *target_maze)
 /* Update an already copied maze, copy only things that change during search */
 /* This is specifically for penalty and deadlock searches, so don't bother
    copying stuff not needed there */
@@ -198,7 +198,7 @@ MAZE *UpdateMaze(MAZE *maze, MAZE *target_maze)
 }
 
 
-MAZE *CopyMaze(MAZE *maze) {
+MAZE *CopyMaze(const MAZE *maze) {
 
 	MAZE *ret_maze;
 

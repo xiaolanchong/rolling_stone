@@ -488,9 +488,9 @@ void OptionsMenu()
 		break;
        case CmdOptionOE:
 		param = CmdParam(cmdstr,1);
-		Options.overestim = atof(param);
+		Options.overestim = (float)atof(param);
 		param = CmdParam(cmdstr,2);
-		Options.hoverestim = atof(param);
+		Options.hoverestim = (float)atof(param);
 		if (Options.hoverestim == 0.0) Options.hoverestim = 1.0;
 		break;
        case CmdOptionAD:
@@ -528,7 +528,6 @@ void OptionsMenu()
    }
 }
 
-COMMAND
 /*=============================================================================
 |
 | Descr.:    Get a command from the user.  By default the input is standard
@@ -548,7 +547,7 @@ COMMAND
 | Side eff.: None.
 |
 =============================================================================*/
-GetCommand(char prompt[], CMDMENU cmdMenu[], char cmdstr[] )
+COMMAND GetCommand(char prompt[], CMDMENU cmdMenu[], char cmdstr[] )
 {
    int  i;
 

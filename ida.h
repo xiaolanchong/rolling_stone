@@ -11,16 +11,21 @@
 
 extern IDA *IdaInfo;
 
-int   StartIda(int nomacro);
+/* Sets up all data structures and repeatedly calls ida with increasing
+   threshold to guarantee optimal solutions, returns 0 if solution found
+   otherwise the smallest heuristic value seen at any leaf node if this is
+   ENDPATH there is no solution - deadlock */
+int   StartIda(BOOLTYPE nomacro);
+
 void  PrintSolution();
-int   IsGoalNodeNorm(int g);
+BOOLTYPE   IsGoalNodeNorm(int g);
 int   Ida(int depth, int g);
 void  SetManStoneSquares(MAZE *maze, MOVE bestmove);
-int   AbortSearch();
+BOOLTYPE   AbortSearch();
 void  InitIDA(IDA *ida);
  
-int   DistantSquares(PHYSID s1, PHYSID s2, short crowding);
-int   DistantMove(MAZE *maze, MOVE *last_move, MOVE *test_move);
+BOOLTYPE   DistantSquares(PHYSID s1, PHYSID s2, short crowding);
+BOOLTYPE   DistantMove(const MAZE *maze, const MOVE *last_move, const MOVE *test_move);
 void  SetLocalCut(int k, int m, int d);
-int   RegisterMove(MOVE *move, int depth);
-short Crowding(MAZE *maze, PHYSID sq);
+BOOLTYPE   RegisterMove(MOVE *move, int depth);
+short Crowding(const MAZE *maze, PHYSID sq);

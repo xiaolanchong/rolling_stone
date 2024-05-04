@@ -24,6 +24,6 @@ typedef struct {
 void  InitHist(HISTOGRAM *hist);
 void  ResetHist(HISTOGRAM *hist);
 void  IncCounter(HISTOGRAM *hist, int index);
-float GetAvgHist(HISTOGRAM *hist);
-void  PrintHist(HISTOGRAM *hist);
-void  PrintHist2(HISTOGRAM *hist, HISTOGRAM *hist2);
+float GetAvgHist(const HISTOGRAM *hist);
+void  PrintHist(const HISTOGRAM *hist);
+void  PrintHist2(const HISTOGRAM *hist, const HISTOGRAM *hist2);

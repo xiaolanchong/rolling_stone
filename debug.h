@@ -15,7 +15,7 @@
 #define SR(func)
 #endif
 
-void Mprintf( int priority, char *format, ... );
-void Debug( int level, int indent, char *format, ... );
-void Assert(int cond, char *format, ...);
+void Mprintf( int priority, const char *format, ... );
+void Debug( int level, int indent, const char *format, ... );
+void Assert(int cond, const char *format, ...);
 

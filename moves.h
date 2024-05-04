@@ -21,14 +21,18 @@
 	SetBitBS(maze->stone,to); \
 	}
 	  
-extern int DirToDiff[8];
-extern int  OppDir[8];
-extern int NextDir[8];
-extern int PrevDir[8];
+extern const int DirToDiff[EXT_DIRECTION_NUM];
+extern const int  OppDir[EXT_DIRECTION_NUM];
+extern const int NextDir[EXT_DIRECTION_NUM];
+extern const int PrevDir[EXT_DIRECTION_NUM];
 
 int  GenerateMoves(MAZE *maze, MOVE *moves);
-int  MakeMove(MAZE *maze, MOVE *move, UNMOVE *unmove, int targetpen);
-int  UnMakeMove(MAZE *maze, UNMOVE *unmove, int targetpen);
+
+/* this is a routine that makes a STONE move, not merely a man move like
+ * DoMove. It will just put the man to the new location */
+int  MakeMove(MAZE *maze, const MOVE *move, UNMOVE *unmove, int targetpen);
+
+int  UnMakeMove(MAZE *maze, const UNMOVE *unmove, int targetpen);
 int  DistToGoal(MAZE *maze, PHYSID start, PHYSID goal, PHYSID *last_over);
 void Moves(MAZE *maze, PHYSID *from, signed char *reach);
 void GenAllSquares( PHYSID pos, PHYSID *from, BitString all_squares );
@@ -39,9 +43,10 @@ void PushesMoves2(MAZE *maze, PHYSID start, PHYSID goal,
 		 int *pushes, int *moves, 
 		 BitString stone_squares, BitString man_squares);
 int  ValidSolution(MAZE *maze, MOVE *solution);
-int DiffToDir(int diff);
+DIRECTION DiffToDir(int diff);
 
 /* all the move ordering functions: */
+// return number of moves
 int NoMoveOrdering(int depth, int number_moves);
 int NewMoveOrdering(int depth, int number_moves);
 int ManDistMoveOrdering(int depth, int number_moves);

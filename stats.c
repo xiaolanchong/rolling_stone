@@ -16,7 +16,7 @@
 #include <sys/resource.h>
 #endif
 
-MOVE DummyMove = {ENDPATH,ENDPATH,ENDPATH,ENDPATH};
+const MOVE DummyMove = {ENDPATH,ENDPATH,ENDPATH,ENDPATH};
 long area_pos_nc=0, area_neg_nc=0;	/* node counts for pos/neg searches */
 int  area_pos_sc=0, area_neg_sc=0;	/* search count for pos/neg */
 long dl_pos_nc=0, dl_neg_nc=0;	/* node counts for pos/neg searches */

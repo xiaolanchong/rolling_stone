@@ -9,7 +9,9 @@
 ** implied warranty.
 */ 
 
+// bit count of the number
 extern unsigned char BitNumber[256];
+// 1st bit 1 position, -1 if none
 extern   signed char BitFirst[256];
 /*
 #define BASETYPE   int
@@ -20,47 +22,47 @@ extern   signed char BitFirst[256];
 */
 
 void InitBS();
-int  Is0BS(BitString a);
-int  Isnt0BS(BitString a);
-int FindAnySet(BitString a);
-int FindFirstSet( BitString bs );
-int  NumberBitsInt(int a);
-int  NumberBitsBS(BitString a);
-void PrintBS(BitString a);
-void PrintBitMaze(BitString a);
-int  EqualBS(BitString a, BitString b);
-int  AllBitsSetBS(BitString x, BitString bits);
-void UnsetBS(BitString x, BitString bits);
+BOOLTYPE  Is0BS(const BitString a);
+BOOLTYPE  Isnt0BS(const BitString a);
+PHYSID FindAnySet(const BitString a);
+int FindFirstSet(const BitString bs );
+int  NumberBitsInt(const int a);
+int  NumberBitsBS(const BitString a);
+void PrintBS(const BitString a);
+void PrintBitMaze(const BitString a);
+BOOLTYPE  EqualBS(const BitString a, const BitString b);
+BOOLTYPE  AllBitsSetBS(const BitString x, const BitString bits);
+void UnsetBS(BitString x, const BitString bits);
 
-void BitAndNotBS(BitString r, BitString a, BitString b);
-void BitAndNotButOrBS(BitString r, BitString a, BitString b, BitString c);
-void BitAndBS (BitString r, BitString a, BitString b);
-void BitAndAndBS (BitString r, BitString a, BitString b, BitString c);
-void BitAndAndNotBS (BitString r, BitString a, BitString b, BitString c);
-void BitNandBS(BitString r, BitString a, BitString b);
-void BitOrBS  (BitString r, BitString a, BitString b);
-void BitOrAndEqBS(BitString a, BitString b, BitString c);
-void BitNorBS (BitString r, BitString a, BitString b);
-void BitNotBS (BitString r, BitString a);
-void BitNotAndNotBS(BitString r, BitString a, BitString b);
+void BitAndNotBS(BitString r, const BitString a, const BitString b);
+void BitAndNotButOrBS(BitString r, const BitString a, const BitString b, const BitString c);
+void BitAndBS (BitString r, const BitString a, const BitString b);
+void BitAndAndBS (BitString r, const BitString a, const BitString b, const BitString c);
+void BitAndAndNotBS (BitString r, const BitString a, const BitString b, const BitString c);
+void BitNandBS(BitString r, const BitString a, const BitString b);
+void BitOrBS  (BitString r, const BitString a, const BitString b);
+void BitOrAndEqBS(BitString a, const BitString b, const BitString c);
+void BitNorBS (BitString r, const BitString a, const BitString b);
+void BitNotBS (BitString r, const BitString a);
+void BitNotAndNotBS(BitString r, const BitString a, const BitString b);
 
-void BitAndEqBS (BitString a, BitString b);
-void BitNandEqBS(BitString a, BitString b);
-void BitOrEqBS  (BitString a, BitString b);
-void BitNorEqBS (BitString a, BitString b);
-void BitAndNotButOrEqBS(BitString a, BitString b, BitString c);
-void BitAndNotEqBS(BitString a, BitString b);
-void BitAndNotAndNotBS(BitString r, BitString a, BitString b, BitString c);
-void BitNotAndNotAndNotBS(BitString r, BitString a, BitString b, BitString c);
+void BitAndEqBS (BitString a, const BitString b);
+void BitNandEqBS(BitString a, const BitString b);
+void BitOrEqBS  (BitString a, const BitString b);
+void BitNorEqBS (BitString a, const BitString b);
+void BitAndNotButOrEqBS(BitString a, const BitString b, const BitString c);
+void BitAndNotEqBS(BitString a, const BitString b);
+void BitAndNotAndNotBS(BitString r, const BitString a, const BitString b, const BitString c);
+void BitNotAndNotAndNotBS(BitString r, const BitString a, const BitString b, const BitString c);
 
 
-int  LogAndBS   (BitString a, BitString b);
-int  LogAndNotBS(BitString a, BitString b);
-int  LogAndNotAndNotBS(BitString a, BitString b, BitString c);
-int  LogAndAndNotBS(BitString a, BitString b, BitString c);
-int  LogOrBS    (BitString a, BitString b);
-int  LogOrNotBS (BitString a, BitString b);
-int  LogNorAndNotBS (BitString r, BitString a, BitString b);
+BOOLTYPE  LogAndBS   (const BitString a, const BitString b);
+BOOLTYPE  LogAndNotBS(const BitString a, const BitString b);
+BOOLTYPE  LogAndNotAndNotBS(const BitString a, const BitString b, const BitString c);
+BOOLTYPE  LogAndAndNotBS(const BitString a, const BitString b, const BitString c);
+BOOLTYPE  LogOrBS    (const BitString a, const BitString b);
+BOOLTYPE  LogOrNotBS (const BitString a, const BitString b);
+BOOLTYPE  LogNorAndNotBS (const BitString r, const BitString a, const BitString b);
 
 #define Set0BS(a) memset(a,0,sizeof(BitString))
 #define Set1BS(a) memset(a,0xff,sizeof(BitString))
