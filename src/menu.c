@@ -142,7 +142,7 @@ MainMenu()
 				ReadMaze(fp,&Maze);
 				fclose(fp);
 				IdaInfo = &MainIdaInfo;
-				StartIda(YES);
+				StartIda(YES, NULL);
 			} else {
                                 My_exit(1,"Menu: %s %s\n",name,strerror(errno));
 			}

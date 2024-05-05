@@ -12,6 +12,7 @@
 extern int PosNr;
 
 void ReadMaze(FILE *fp, MAZE *maze );
+void ReadMazeFromBuffer(const char* buffer, size_t size, MAZE* maze);
 void PrintMaze(const MAZE *maze);
 const char *PrintMove(MOVE move);
 const char *HumanMove(MOVE move);

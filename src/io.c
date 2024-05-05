@@ -51,13 +51,24 @@ void PrintMaze(const MAZE *maze) {
 		 total_node_count );
 }
 
-void ReadMaze(FILE *fp, MAZE *maze ) {
-	int sq,x,y,pos;
+void ReadMaze(FILE* fp, MAZE* maze) {
+	
+	fseek(fp, 0L, SEEK_END);
+	size_t filesize = ftell(fp);
+	fseek(fp, 0L, SEEK_SET);
+	char* const contents = My_realloc(NULL, (int)filesize);
+	const size_t chars_read = fread(contents, filesize, 1, fp);
+	ReadMazeFromBuffer(contents, chars_read, maze);
+	My_free(contents);
+}
 
+void ReadMazeFromBuffer(const char* buffer, size_t size, MAZE* maze) {
+	int sq, x, y, pos;
 	x = 0;
 	y = YSIZE-1;
 	ResetMaze(maze);
-	while ( (sq = getc(fp)) != EOF) {
+	for (size_t offset = 0; offset < size; ++offset) {
+		sq = buffer[offset];
 		pos = XY2ID(x,y);
 		if (sq=='\n' && x==0) goto END_INPUT;
 		if (y<0) {

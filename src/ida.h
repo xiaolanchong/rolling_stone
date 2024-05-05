@@ -14,10 +14,12 @@ extern IDA *IdaInfo;
 /* Sets up all data structures and repeatedly calls ida with increasing
    threshold to guarantee optimal solutions, returns 0 if solution found
    otherwise the smallest heuristic value seen at any leaf node if this is
-   ENDPATH there is no solution - deadlock */
-int   StartIda(BOOLTYPE nomacro);
+   ENDPATH there is no solution - deadlock 
+   out_solution is optional and must contain at least ENDPATH items, DummyMove ends the path
+   */
+int   StartIda(BOOLTYPE nomacro, MOVE* out_solution);
 
-void  PrintSolution();
+void  PrintSolution(MOVE* out_solution);
 BOOLTYPE   IsGoalNodeNorm(int g);
 int   Ida(int depth, int g);
 void  SetManStoneSquares(MAZE *maze, MOVE bestmove);

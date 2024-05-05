@@ -21,7 +21,7 @@
 
 IDA *IdaInfo;
 
-int StartIda(BOOLTYPE nomacro) {
+int StartIda(BOOLTYPE nomacro, MOVE* out_solution) {
 
 
 	int       result=ENDPATH;
@@ -102,7 +102,7 @@ printf("removing goal macro\n");
 
 		goto START_IDA;
 	}
-	PrintSolution();
+	PrintSolution(out_solution);
 
 	DelCopiedMaze( PenMaze );
 	DelCopiedMaze( DeadMaze );
@@ -114,7 +114,7 @@ printf("removing goal macro\n");
 
 static void printSolution(const MOVE* solution, size_t size);
 
-void PrintSolution()
+void PrintSolution(MOVE* out_solution)
 {
 	MAZE     *maze;
 	MOVE      lastmove;
@@ -146,6 +146,8 @@ void PrintSolution()
 	}
 	Debug(0,-1,"\n(moves: %i depth: %i)\n",g,i);
 	solution[i] = DummyMove;
+	for (size_t move_idx = 0; out_solution != NULL && move_idx < i + 1; ++move_idx)
+		out_solution[move_idx] = solution[move_idx];
 	printSolution(solution, i);
 	DelCopiedMaze(maze);
 

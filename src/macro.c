@@ -1211,6 +1211,7 @@ int StartBuildGMTree(MAZE *start_maze, GROOM *groom) {
 	/* setup IdaInfo */
 	old_idainfo = IdaInfo;
 	InitIDA(&idainfo);
+	idainfo.PrintPriority = old_idainfo->PrintPriority;
 	IdaInfo			= &idainfo;
 	idainfo.IdaMaze		= maze = CopyMaze(start_maze);
 
