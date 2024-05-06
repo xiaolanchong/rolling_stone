@@ -27,7 +27,7 @@ HASHKEY  UpdateHashKey( MAZE *maze, const UNMOVE *move);
 void GGStoreHashTable(HASHKEY hashkey);
 int  GGGetHashTable(HASHKEY hashkey);
 
-extern HASHKEY RandomTable[ 896 ];
+extern const HASHKEY RandomTable[ 896 ];
 extern HASHENTRY HashTableNorm[MAX_HASHENTRIES];
 extern HASHENTRY HashTableDead[MAX_HASHENTRIES];
 extern HASHENTRY HashTablePen[MAX_HASHENTRIES];

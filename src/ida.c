@@ -112,8 +112,6 @@ printf("removing goal macro\n");
 	return(result);
 }
 
-static void printSolution(const MOVE* solution, size_t size);
-
 void PrintSolution(MOVE* out_solution)
 {
 	MAZE     *maze;
@@ -148,7 +146,6 @@ void PrintSolution(MOVE* out_solution)
 	solution[i] = DummyMove;
 	for (size_t move_idx = 0; out_solution != NULL && move_idx < i + 1; ++move_idx)
 		out_solution[move_idx] = solution[move_idx];
-	printSolution(solution, i);
 	DelCopiedMaze(maze);
 
 	maze = CopyMaze(IdaInfo->IdaMaze);
@@ -557,25 +554,3 @@ BOOLTYPE RegisterMove(MOVE *move, int depth)
 	return( NO );
 }
 
-static char toHex(int x)
-{
-	return ((x < 10) ? '0' : 'A') + x;
-}
-
-void printSolution(const MOVE* solution, size_t size)
-{
-	for (size_t i = 0; i < size; ++i)
-	{
-		int xm, ym;
-		int fromx, fromy, tox, toy;
-		ToScreenCoord(solution[i].man, &xm, &ym);
-		ToScreenCoord(solution[i].from, &fromx, &fromy);
-		ToScreenCoord(solution[i].to, &tox, &toy);
-		Debug(0, -1, " %c%c-%c%c-%c%c",
-			toHex(xm), toHex(ym),
-			toHex(fromx), toHex(fromy),
-			toHex(tox), toHex(toy)
-			);
-	}
-	Debug(0, -1, "\n");
-}

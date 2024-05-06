@@ -93,8 +93,8 @@ const DLSUP DlSup1[MAX_SQUARES] = {
 	{-2, -1, NORTH, 1, 0, 0, 0, 0, NULL}		/* N -23 */
 };
 
-TREE  AllTrees[10];
-short NumberTrees = 0;
+static TREE  AllTrees[10];
+static short NumberTrees = 0;
 
 int InitTree( const DLSUP *sup ) {
 	int id = NumberTrees++;
@@ -139,7 +139,7 @@ BOOLTYPE DeadTree(const MAZE *maze, PHYSID pos, DIRECTION direction) {
 	const TREE  *t;
 
 	
-	if (maze->Phys[pos].goal >= 0) return(0);
+	if (maze->Phys[pos].goal >= 0) return(NO);
 	for (tree_id = 0; 
 	     tree_id < NumberTrees && tree_id < Options.dl_db; 
 	     tree_id++) {
@@ -151,7 +151,7 @@ BOOLTYPE DeadTree(const MAZE *maze, PHYSID pos, DIRECTION direction) {
 	   case WEST:  xofs =   1; yofs = -YSIZE; break;
 	   case SOUTH: xofs = -YSIZE; yofs = -1; break;
 	   default: SR(Assert(0,"DeadTree: wrong direction: %i\n", direction));
-		 return(0);
+		 return(NO);
 	   }
 	   index = 0;
 	   i = 0;
@@ -176,7 +176,7 @@ BOOLTYPE DeadTree(const MAZE *maze, PHYSID pos, DIRECTION direction) {
 	   } while (index>0);
 
 	   if (index == 0) {
-		return(1);
+		return(YES);
 	   }
 TEST_MIRROR:
 	   switch (direction) {

@@ -52,12 +52,11 @@ void PrintMaze(const MAZE *maze) {
 }
 
 void ReadMaze(FILE* fp, MAZE* maze) {
-	
 	fseek(fp, 0L, SEEK_END);
 	size_t filesize = ftell(fp);
 	fseek(fp, 0L, SEEK_SET);
 	char* const contents = My_realloc(NULL, (int)filesize);
-	const size_t chars_read = fread(contents, filesize, 1, fp);
+	const size_t chars_read = fread(contents, 1, filesize, fp);
 	ReadMazeFromBuffer(contents, chars_read, maze);
 	My_free(contents);
 }

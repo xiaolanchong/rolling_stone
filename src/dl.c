@@ -22,10 +22,10 @@ void sigint (int signum) {
 	signal(SIGINT,sigint);
 }
 
-#define MAX_PRINT_PRIORITY INT_MAX;
+#define SUPER_VERBOSE_PRINT_PRIORITY INT_MAX;
 const int DEFAULT_PRINT_PRIORITY =
 #if defined(_DEBUG) || defined(DEBUG)
-	MAX_PRINT_PRIORITY
+   SUPER_VERBOSE_PRINT_PRIORITY
 #else
 	2
 #endif

@@ -68,6 +68,10 @@ if (MSVC)
 	else()
 		add_compile_options(/W4)
 	endif()
+	set_property(TARGET rolling_stone PROPERTY
+		MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL<$<CONFIG:Debug>:Debug>")
+    set_property(TARGET rolling_stone PROPERTY
+		MSVC_RUNTIME_LIBRARY "MultiThreadedDLL<$<CONFIG:Release>:Release>")
 	target_link_options(rolling_stone PRIVATE /STACK:50000000)
 	target_link_options(rolling_stone PRIVATE /DEBUG)
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)

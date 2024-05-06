@@ -1,5 +1,8 @@
 
 #include "RollingStoneTest.h"
+#include <vector>
+#include <memory>
+#include <mutex>
 
 extern "C"
 {
@@ -7,34 +10,45 @@ extern "C"
 #include "../src/init.h"
 
 	IDA  MainIdaInfo;
-	MAZE Maze;
+}
+
+namespace
+{
+	std::once_flag initGlobalVarsAndIdaFlag;
+
+	void initEnvironment()
+	{
+		InitRandom();
+		init_opts();
+		InitBS();
+
+		InitIDA(&MainIdaInfo);
+		IdaInfo = &MainIdaInfo;
+		MainIdaInfo.PrintPriority = -1000;
+
+#ifdef _MSC_VER
+		LoadTrees("../../../../" DL1PATHFILE, "../../../../" DL2PATHFILE);
+#else
+		LoadTrees(DL1PATHFILE, DL2PATHFILE);
+#endif
+	}
 }
 
 RollingStoneTest::RollingStoneTest()
 {
-	InitRandom();
-	init_opts();
-	InitBS();
-	InitIDA(&MainIdaInfo);
-	IdaInfo = &MainIdaInfo;
-
-	IdaInfo->PrintPriority = -1000;
-#ifdef _MSC_VER
-	LoadTrees("../../../../" DL1PATHFILE, "../../../../" DL2PATHFILE);
-#else
-	LoadTrees(DL1PATHFILE, DL2PATHFILE);
-#endif
+	std::call_once(initGlobalVarsAndIdaFlag, &initEnvironment);
 }
 
 Path RollingStoneTest::FindPath(const std::string& mazeStr)
 {
-	InitMaze(&Maze);
+	const auto Maze = std::make_unique<MAZE>();
+	InitMaze(Maze.get());
 
-	MainIdaInfo.IdaMaze = &Maze;
-	ReadMazeFromBuffer(mazeStr.c_str(), mazeStr.size(), &Maze);
+	MainIdaInfo.IdaMaze = Maze.get();
 	IdaInfo = &MainIdaInfo;
-	MOVE solution[ENDPATH] = {};
-	int result = StartIda(YES, solution);
+	ReadMazeFromBuffer(mazeStr.c_str(), mazeStr.size(), Maze.get());
+	std::vector<MOVE> solution(ENDPATH);
+	int result = StartIda(YES, &solution[0]);
 	if (result < 0 || result >= ENDPATH)
 		return {};
 

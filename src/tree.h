@@ -11,8 +11,13 @@
 
 typedef enum { BlancSquare, StoneSquare, WallSquare} SQUARE;
 
-// Deadlock entry
-typedef int DLENTRY[3];
+#define SQUARE_NUM 3  // number of items in SQUARE
+
+// Deadlock tree indices:
+// -1 is a dead-end (stop the branch traversing),
+// 0 is a leaf (deadlock found)
+// 1.. - child node indices to go a level down
+typedef int DLENTRY[SQUARE_NUM];
 
 // Dead lock support
 typedef struct {
@@ -35,7 +40,8 @@ typedef struct {
 	size_t	 CurrentLength;
 } TREE;
 
-// Loads the trees from the files
+// Loads the deadlock pattern trees from the files with the given names.
+// There are 2 pattern tree.
 void LoadTrees(const char *sup1filename, const char* sup2filename);
 
 /* use the tree to determine if pushing a stone to "pos" in "direction" in

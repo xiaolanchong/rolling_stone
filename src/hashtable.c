@@ -239,7 +239,7 @@ HASHKEY UpdateHashKey( MAZE *maze, const UNMOVE *move) {
 	return(maze->hashkey);
 }
 
-uint32_t RandomTable32[1792] = {
+const static uint32_t RandomTable32[1792] = {
 0x7462cdf7,0x47b7a5f6,0x1e232b82,0x42db26cd,0x03ce62c9,0x4e8e22d0,0x237f9bfc,0x12a384ef,
 0x7a25810b,0x52f3a8da,0x789478a6,0x2fbca201,0x29625d3d,0x08d86e94,0xeb2ee000,0xa87cf97c,
 0xeb4987df,0x92990981,0xdb8cfc8a,0x86a5090a,0x42e70d71,0x5751af18,0x1c93a4c4,0x5f1293d7,
@@ -467,7 +467,7 @@ uint32_t RandomTable32[1792] = {
 
 /* HASHKEY *RandomTable = (HASHKEY*) RandomTable32; */
 
-HASHKEY RandomTable[ 896 ];
+const HASHKEY RandomTable[ 896 ];
 
 /* Kludge to get an array of aligned long longs */
 void InitRandom()
